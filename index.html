@@ -441,28 +441,32 @@
      class="fixed inset-0 hidden justify-center items-center bg-black/60 backdrop-blur-xl z-[900]"></div>
 
 <div id="modal"
-     class="fixed inset-0 hidden justify-center items-center z-[1000] px-6">
+     class="fixed inset-0 hidden z-[1000] flex justify-center items-center px-4">
 
-  <div class="glass relative w-full max-w-3xl rounded-2xl border border-white/20 bg-black/50 backdrop-blur-2xl p-10 shadow-2xl overflow-hidden">
+  <div class="glass relative w-full max-w-3xl rounded-2xl border border-white/20 bg-black/50 backdrop-blur-2xl shadow-2xl overflow-hidden">
 
-    <!-- Animated hologram glow -->
-    <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute w-[500px] h-[500px] bg-blue-500/20 blur-[180px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+    <!-- TOP BAR (sticky) -->
+    <div class="sticky top-0 z-50 bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 border-b border-white/10">
+      <h3 class="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
+        Synk Orchestration Demo
+      </h3>
+      <button id="close-modal"
+              class="text-gray-300 hover:text-white text-2xl font-bold leading-none">&times;</button>
     </div>
 
-    <h3 class="text-3xl font-extrabold text-center mb-10 bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
-      Synk Orchestration Demo
-    </h3>
+    <!-- SCROLLABLE CONTENT -->
+    <div class="max-h-[70vh] overflow-y-auto px-8 py-6 space-y-6" id="timeline">
+      <!-- Steps injected dynamically -->
+    </div>
 
-    <!-- TIMELINE -->
-    <div id="timeline" class="space-y-6 text-gray-200 text-lg font-medium"></div>
-
-    <div class="text-center mt-10">
-      <button id="close-modal"
+    <!-- BOTTOM CLOSE BUTTON (sticky) -->
+    <div class="sticky bottom-0 z-50 bg-black/60 backdrop-blur-xl px-6 py-4 border-t border-white/10 text-center">
+      <button id="close-modal-bottom"
               class="btn text-black font-semibold shadow-xl px-6 py-3">
         Close
       </button>
     </div>
+    document.getElementById("close-modal-bottom").onclick = closeModalNow;
 
   </div>
 </div>
