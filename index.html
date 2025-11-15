@@ -317,60 +317,89 @@
 </section>
 
 
-<!-- =============================== -->
-<!--     DYNAMIC BOARDING PASS       -->
-<!-- =============================== -->
-<section id="boarding-pass-wrapper"
-         class="relative w-full flex justify-center my-20 px-6">
+<!-- ===================================== -->
+<!--   BOARDING PASS + IMPACTFUL TEXT     -->
+<!-- ===================================== -->
+<section id="boarding-section"
+         class="w-full py-24 px-6 md:px-16 flex flex-col md:flex-row items-center justify-between gap-12">
 
-  <div id="boarding-pass"
-       class="w-[320px] md:w-[380px] bg-[#0f172a] border border-sky-500/30 rounded-2xl shadow-2xl p-6 text-slate-200
-              transform translate-y-16 opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(.22,.61,.36,1)]
-              relative">
+  <!-- LEFT SIDE TEXT -->
+  <div class="md:w-1/2 reveal">
+    <h2 class="text-4xl md:text-5xl font-extrabold leading-tight mb-6 
+               bg-gradient-to-r from-sky-300 to-blue-500 text-transparent bg-clip-text">
+      Travel that updates <br> itself.
+    </h2>
 
-    <div class="text-sm tracking-widest text-sky-300 mb-2">BOARDING PASS</div>
+    <p class="text-lg text-gray-300 leading-relaxed mb-6">
+      Synk watches your journey in real-time — delays, gate changes, 
+      traffic, reschedules, cancellations — and reacts instantly.
+    </p>
 
-    <div class="flex justify-between items-center mb-4">
-      <div>
-        <div class="text-3xl font-bold" id="bp-origin">BOM</div>
-        <div class="text-xs text-slate-400">Mumbai</div>
+    <p class="text-lg text-gray-300 leading-relaxed mb-6">
+      No more switching apps, checking emails, refreshing bookings, 
+      or coordinating between cab ⇄ flight ⇄ hotel.  
+      Everything updates *before you even notice*.
+    </p>
+
+    <p class="text-xl font-semibold text-sky-300 mt-4">
+      This is what real-time AI orchestration looks like.
+    </p>
+  </div>
+
+  <!-- RIGHT SIDE BOARDING PASS -->
+  <div id="boarding-pass-wrapper"
+       class="md:w-1/2 flex justify-center">
+
+    <div id="boarding-pass"
+         class="w-[320px] md:w-[380px] bg-[#0f172a] border border-sky-500/30 
+                rounded-2xl shadow-2xl p-6 text-slate-200
+                transform translate-y-16 opacity-0 
+                transition-all duration-[1200ms] ease-[cubic-bezier(.22,.61,.36,1)]
+                relative">
+
+      <div class="text-sm tracking-widest text-sky-300 mb-2">BOARDING PASS</div>
+
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <div class="text-3xl font-bold" id="bp-origin">BOM</div>
+          <div class="text-xs text-slate-400">Mumbai</div>
+        </div>
+        <div class="text-4xl font-light text-sky-400">→</div>
+        <div>
+          <div class="text-3xl font-bold" id="bp-destination">DEL</div>
+          <div class="text-xs text-slate-400">New Delhi</div>
+        </div>
       </div>
-      <div class="text-4xl font-light text-sky-400">→</div>
-      <div>
-        <div class="text-3xl font-bold" id="bp-destination">DEL</div>
-        <div class="text-xs text-slate-400">New Delhi</div>
-      </div>
-    </div>
 
-    <div class="border-t border-white/10 my-4"></div>
+      <div class="border-t border-white/10 my-4"></div>
 
-    <div class="grid grid-cols-2 gap-4 text-sm">
-      <div>
-        <div class="text-xs text-slate-400">Flight</div>
-        <div class="font-semibold text-sky-300" id="bp-flight">AI 431</div>
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <div class="text-xs text-slate-400">Flight</div>
+          <div class="font-semibold text-sky-300" id="bp-flight">AI 431</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400">Gate</div>
+          <div class="font-semibold" id="bp-gate">A7</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400">Depart</div>
+          <div class="font-semibold" id="bp-time">19:45</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400">Seat</div>
+          <div class="font-semibold" id="bp-seat">22A</div>
+        </div>
       </div>
-      <div>
-        <div class="text-xs text-slate-400">Gate</div>
-        <div class="font-semibold" id="bp-gate">A7</div>
-      </div>
-      <div>
-        <div class="text-xs text-slate-400">Depart</div>
-        <div class="font-semibold" id="bp-time">19:45</div>
-      </div>
-      <div>
-        <div class="text-xs text-slate-400">Seat</div>
-        <div class="font-semibold" id="bp-seat">22A</div>
-      </div>
-    </div>
 
-    <div class="border-t border-white/10 my-4"></div>
+      <div class="border-t border-white/10 my-4"></div>
 
-    <div class="text-xs text-slate-400">
-      Auto-updates based on Synk’s real-time orchestration.
+      <div class="text-xs text-slate-400">
+        Auto-updates based on Synk’s real-time orchestration.
+      </div>
     </div>
   </div>
 </section>
-
 
 <!-- ======================================= -->
 <!--       UNDER THE HOOD (ORCHESTRATION)    -->
@@ -973,19 +1002,18 @@ closeModalEl.onclick = closeModalNow;
 closeModalBottomEl.onclick = closeModalNow;
 modalBackdropEl.onclick = closeModalNow;
 
-// ===============================
-//   BOARDING PASS ANIMATION
-// ===============================
-function showBoardingPass() {
-  const pass = document.getElementById("boarding-pass");
+// =========================================
+//     BOARDING PASS SLIDE-UP ANIMATION
+// =========================================
+function playBoardingPass() {
+  const bp = document.getElementById("boarding-pass");
 
-  // Slide up + fade in animation
   setTimeout(() => {
-    pass.classList.remove("translate-y-16", "opacity-0");
-    pass.classList.add("translate-y-0", "opacity-100");
-  }, 150);
+    bp.classList.remove("translate-y-16", "opacity-0");
+    bp.classList.add("translate-y-0", "opacity-100");
+  }, 200);
 
-  // Random values
+  // Random dynamic replacements
   const flights = ["AI 431", "UK 811", "6E 502", "SG 902", "G8 311"];
   const gates   = ["A7", "B4", "C12", "D3", "A2"];
   const times   = ["19:45", "20:10", "18:30", "22:15", "21:05"];
@@ -997,17 +1025,17 @@ function showBoardingPass() {
   document.getElementById("bp-seat").textContent = seats[Math.floor(Math.random()*seats.length)];
 }
 
-// Reveal when section enters view
-const bpObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      showBoardingPass();
-      bpObserver.disconnect();
+// Trigger on scroll
+const bpObs = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      playBoardingPass();
+      bpObs.disconnect();
     }
   });
 }, { threshold: 0.3 });
 
-bpObserver.observe(document.getElementById("boarding-pass-wrapper"));
+bpObs.observe(document.getElementById("boarding-pass-wrapper"));
 </script>
 
 </body>
