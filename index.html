@@ -90,6 +90,51 @@
       backdrop-filter: blur(20px);
       background: rgba(0,0,0,0.6);
     }
+
+        /* Hologram scan bar in modal */
+    .scan-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -30%;
+      height: 160%;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(56, 189, 248, 0.12) 40%,
+        rgba(125, 211, 252, 0.45) 50%,
+        rgba(56, 189, 248, 0.15) 60%,
+        transparent 100%
+      );
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: scan 4s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-100%); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(100%); opacity: 0; }
+    }
+
+    /* Pulsing node for orchestration map */
+    .node-pulse {
+      box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7);
+      animation: nodePulse 2.4s ease-out infinite;
+    }
+
+    @keyframes nodePulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 18px rgba(56, 189, 248, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+      }
+    }
   </style>
 </head>
 
@@ -99,6 +144,9 @@
 <!--           HERO SECTION          -->
 <!-- =============================== -->
 
+  <!-- Starfield background behind entire site -->
+<canvas id="starfield" class="fixed inset-0 -z-10 pointer-events-none"></canvas>
+  
 <header class="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-xl border-b border-white/10">
   <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
     <div class="flex items-center gap-3">
@@ -445,6 +493,9 @@
 
   <div class="glass relative w-full max-w-3xl rounded-2xl border border-white/20 bg-black/50 backdrop-blur-2xl shadow-2xl overflow-hidden">
 
+    <!-- Hologram scan overlay -->
+    <div class="scan-bar"></div>
+
     <!-- TOP BAR (sticky) -->
     <div class="sticky top-0 z-50 bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 border-b border-white/10">
       <h3 class="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
@@ -455,8 +506,61 @@
     </div>
 
     <!-- SCROLLABLE CONTENT -->
-    <div class="max-h-[70vh] overflow-y-auto px-8 py-6 space-y-6" id="timeline">
-      <!-- Steps injected dynamically -->
+    <div class="max-h-[70vh] overflow-y-auto px-8 py-6 space-y-6">
+
+      <!-- MINI ORCHESTRATION MAP (INSIDE MODAL) -->
+      <div class="mb-4">
+        <div class="text-xs uppercase tracking-[0.25em] text-sky-300 mb-3">
+          Route Overview
+        </div>
+        <div class="flex items-center justify-between gap-2 text-[11px] text-gray-200">
+
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Intent</span>
+          </div>
+
+          <div class="flex-1 h-px bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-80"></div>
+
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Calendar</span>
+          </div>
+
+          <div class="flex-1 h-px bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-80"></div>
+
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Cab</span>
+          </div>
+
+          <div class="flex-1 h-px bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-80"></div>
+
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Flight</span>
+          </div>
+
+          <div class="flex-1 h-px bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-80"></div>
+
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Hotel</span>
+          </div>
+
+          <div class="flex-1 h-px bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-80"></div>
+
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Wallet</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div id="timeline" class="space-y-6 text-gray-200 text-lg font-medium"></div>
+
     </div>
 
     <!-- BOTTOM CLOSE BUTTON (sticky) -->
@@ -469,6 +573,105 @@
 
   </div>
 </div>
+
+
+<!-- ======================================= -->
+<!--      SYNK ORCHESTRATION MAP SECTION     -->
+<!-- ======================================= -->
+
+<section id="synk-map" class="relative py-28 bg-gradient-to-b from-black via-[#020617] to-black overflow-hidden">
+
+  <div class="absolute inset-0 opacity-20 pointer-events-none">
+    <div class="absolute w-[600px] h-[600px] rounded-full bg-sky-500/20 blur-[200px] top-1/4 left-1/3"></div>
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-blue-500/20 blur-[200px] bottom-1/4 right-1/3"></div>
+  </div>
+
+  <div class="relative max-w-6xl mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <h2 class="text-3xl md:text-4xl font-extrabold reveal">
+        The Synk Orchestration Map
+      </h2>
+      <p class="text-gray-300 mt-3 reveal">
+        One intent flows through Synk’s AI layer and shapes everything around your journey.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-[1.3fr,1fr] gap-10 items-center">
+
+      <!-- Map diagram -->
+      <div class="glass p-6 md:p-8 reveal">
+        <div class="flex flex-col items-center gap-6">
+
+          <!-- Center node -->
+          <div class="flex flex-col items-center">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-sky-400 node-pulse flex items-center justify-center text-sm font-semibold">
+              Synk.ai
+            </div>
+            <p class="mt-3 text-xs text-gray-300 text-center max-w-xs">
+              Intent in, synchronized journey out.
+            </p>
+          </div>
+
+          <!-- Rings -->
+          <div class="w-full max-w-xl">
+            <div class="flex items-center justify-between text-xs text-gray-200 mb-4">
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Intent</span>
+              </div>
+              <div class="flex-1 h-px mx-1 bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-70"></div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Calendar</span>
+              </div>
+              <div class="flex-1 h-px mx-1 bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-70"></div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Cab</span>
+              </div>
+              <div class="flex-1 h-px mx-1 bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-70"></div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Flight</span>
+              </div>
+              <div class="flex-1 h-px mx-1 bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-70"></div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Hotel</span>
+              </div>
+              <div class="flex-1 h-px mx-1 bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-70"></div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Wallet</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400 text-center mt-4">
+              Synk coordinates every node in this chain — so users experience just one smooth journey.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text explainer -->
+      <div class="space-y-4 text-sm text-gray-300 reveal">
+        <div class="glass p-4">
+          <h3 class="font-semibold text-sky-300 mb-1">Intent as the API</h3>
+          <p>Users speak in plain language. Synk treats that intent as the API contract for everything else that follows.</p>
+        </div>
+        <div class="glass p-4">
+          <h3 class="font-semibold text-sky-300 mb-1">Calendar-aware decisions</h3>
+          <p>Every journey is checked against existing commitments, buffers, and preferences before anything gets booked.</p>
+        </div>
+        <div class="glass p-4">
+          <h3 class="font-semibold text-sky-300 mb-1">All nodes synchronized</h3>
+          <p>Cabs align to flights, hotels align to arrival windows, payments optimize for benefits — all orchestrated centrally.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 
 <!-- =============================== -->
@@ -518,7 +721,7 @@ document.addEventListener("mousemove", (e) => {
 });
 
 
-// PARTICLE ENGINE
+// PARTICLE ENGINE (hero)
 const canvas = document.getElementById("particles");
 if (canvas) {
   const ctx = canvas.getContext("2d");
@@ -558,6 +761,50 @@ if (canvas) {
   window.addEventListener("resize", initParticles);
   initParticles();
   animateParticles();
+}
+
+
+// STARFIELD BACKGROUND (global)
+const starCanvas = document.getElementById("starfield");
+if (starCanvas) {
+  const sctx = starCanvas.getContext("2d");
+  let sw, sh, stars;
+
+  function initStars() {
+    sw = starCanvas.width = window.innerWidth;
+    sh = starCanvas.height = window.innerHeight;
+    stars = Array.from({ length: 120 }, () => ({
+      x: Math.random() * sw,
+      y: Math.random() * sh,
+      r: Math.random() * 1.4 + 0.2,
+      dx: (Math.random() - 0.5) * 0.12,
+      dy: (Math.random() - 0.5) * 0.12,
+      alpha: Math.random() * 0.8 + 0.2
+    }));
+  }
+
+  function drawStars() {
+    sctx.clearRect(0, 0, sw, sh);
+    stars.forEach((s) => {
+      s.x += s.dx;
+      s.y += s.dy;
+      if (s.x < 0) s.x = sw;
+      if (s.x > sw) s.x = 0;
+      if (s.y < 0) s.y = sh;
+      if (s.y > sh) s.y = 0;
+
+      sctx.beginPath();
+      sctx.globalAlpha = s.alpha;
+      sctx.fillStyle = "#94a3b8";
+      sctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      sctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+
+  window.addEventListener("resize", initStars);
+  initStars();
+  drawStars();
 }
 
 
@@ -614,16 +861,16 @@ openModalEl.onclick = () => {
   playTimeline();
 };
 
-closeModalEl.onclick = closeModalNow;
-closeModalBottomEl.onclick = closeModalNow;
-modalBackdropEl.onclick = closeModalNow;
-
 function closeModalNow() {
   modalBackdropEl.classList.add("hidden");
   modalEl.classList.add("hidden");
   timelineEl.innerHTML = "";
   clearInterval(interval);
 }
+
+closeModalEl.onclick = closeModalNow;
+closeModalBottomEl.onclick = closeModalNow;
+modalBackdropEl.onclick = closeModalNow;
 </script>
 
 </body>
