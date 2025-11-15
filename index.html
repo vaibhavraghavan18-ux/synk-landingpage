@@ -466,7 +466,6 @@
         Close
       </button>
     </div>
-    document.getElementById("close-modal-bottom").onclick = closeModalNow;
 
   </div>
 </div>
@@ -569,6 +568,7 @@ const modalBackdropEl = document.getElementById("modal-backdrop");
 const modalEl = document.getElementById("modal");
 const openModalEl = document.getElementById("open-modal");
 const closeModalEl = document.getElementById("close-modal");
+const closeModalBottomEl = document.getElementById("close-modal-bottom");
 const timelineEl = document.getElementById("timeline");
 
 const steps = [
@@ -615,6 +615,7 @@ openModalEl.onclick = () => {
 };
 
 closeModalEl.onclick = closeModalNow;
+closeModalBottomEl.onclick = closeModalNow;
 modalBackdropEl.onclick = closeModalNow;
 
 function closeModalNow() {
