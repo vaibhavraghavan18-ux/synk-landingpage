@@ -320,10 +320,13 @@
 <!-- =============================== -->
 <!--     DYNAMIC BOARDING PASS       -->
 <!-- =============================== -->
-<section id="boarding-pass-wrapper" class="overflow-hidden relative w-full flex justify-end my-20 px-6">
+<section id="boarding-pass-wrapper"
+         class="relative w-full flex justify-center my-20 px-6">
 
   <div id="boarding-pass"
-       class="w-[320px] md:w-[380px] bg-[#0f172a] border border-sky-500/30 rounded-2xl shadow-2xl p-6 text-slate-200 transform translate-x-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(.22,.61,.36,1)] relative">
+       class="w-[320px] md:w-[380px] bg-[#0f172a] border border-sky-500/30 rounded-2xl shadow-2xl p-6 text-slate-200
+              transform translate-y-16 opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(.22,.61,.36,1)]
+              relative">
 
     <div class="text-sm tracking-widest text-sky-300 mb-2">BOARDING PASS</div>
 
@@ -365,10 +368,8 @@
     <div class="text-xs text-slate-400">
       Auto-updates based on Synk’s real-time orchestration.
     </div>
-
   </div>
 </section>
-  
 
 
 <!-- ======================================= -->
@@ -972,19 +973,19 @@ closeModalEl.onclick = closeModalNow;
 closeModalBottomEl.onclick = closeModalNow;
 modalBackdropEl.onclick = closeModalNow;
 
-  // ===============================
+// ===============================
 //   BOARDING PASS ANIMATION
 // ===============================
 function showBoardingPass() {
   const pass = document.getElementById("boarding-pass");
 
-  // Slide in animation
+  // Slide up + fade in animation
   setTimeout(() => {
-    pass.classList.remove("translate-x-full", "opacity-0");
-    pass.classList.add("translate-x-0", "opacity-100");
+    pass.classList.remove("translate-y-16", "opacity-0");
+    pass.classList.add("translate-y-0", "opacity-100");
   }, 150);
 
-  // Random dynamic values
+  // Random values
   const flights = ["AI 431", "UK 811", "6E 502", "SG 902", "G8 311"];
   const gates   = ["A7", "B4", "C12", "D3", "A2"];
   const times   = ["19:45", "20:10", "18:30", "22:15", "21:05"];
@@ -996,7 +997,7 @@ function showBoardingPass() {
   document.getElementById("bp-seat").textContent = seats[Math.floor(Math.random()*seats.length)];
 }
 
-// Trigger when section scrolls into view
+// Reveal when section enters view
 const bpObserver = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
