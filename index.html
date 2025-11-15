@@ -15,27 +15,30 @@
 
   <style>
     :root {
-      --bg-dark: #05070d;
+      --bg-dark: #020617;
+      --bg-deep: #020617;
       --accent1: #3b82f6;
       --accent2: #60a5fa;
-      --glass: rgba(255, 255, 255, 0.08);
-      --line: rgba(255, 255, 255, 0.12);
+      --glass: rgba(15, 23, 42, 0.85);
+      --line: rgba(148, 163, 184, 0.6);
     }
 
     body {
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-dark);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0b1120 0, #020617 55%, #000 100%);
       color: white;
       overflow-x: hidden;
     }
 
+    /* Glassmorphism card */
     .glass {
-      background: var(--glass);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--line);
+      background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.22), transparent 55%), rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(148, 163, 184, 0.45);
       border-radius: 20px;
     }
 
+    /* Reveal animation */
     .reveal {
       opacity: 0;
       transform: translateY(20px);
@@ -46,54 +49,99 @@
       transform: translateY(0);
     }
 
+    /* Hero button */
+    .btn-primary {
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      border-radius: 999px;
+      padding: 14px 28px;
+      font-weight: 600;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+      box-shadow: 0 18px 50px rgba(37, 99, 235, 0.5);
+    }
+    .btn-primary:hover {
+      filter: brightness(1.15);
+      transform: translateY(-3px);
+      box-shadow: 0 22px 60px rgba(56, 189, 248, 0.55);
+    }
+
+    /* Floating glow blobs */
     .glow-pulse {
       animation: glow 4s ease-in-out infinite alternate;
     }
-
     @keyframes glow {
-      0% { opacity: .4; transform: scale(1); }
-      100% { opacity: .9; transform: scale(1.15); }
+      0% { opacity: .35; transform: scale(1); }
+      100% { opacity: .9; transform: scale(1.18); }
     }
 
-    .btn {
-      background: linear-gradient(90deg, var(--accent1), var(--accent2));
-      border-radius: 14px;
-      padding: 14px 26px;
-      transition: 0.25s ease;
-    }
-    .btn:hover {
-      filter: brightness(1.15);
-      transform: translateY(-2px);
+    /* Scan bar (modal + QR) */
+    .scan-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -30%;
+      height: 160%;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(56, 189, 248, 0.18) 40%,
+        rgba(125, 211, 252, 0.55) 50%,
+        rgba(56, 189, 248, 0.2) 60%,
+        transparent 100%
+      );
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: scan 4s linear infinite;
     }
 
+    @keyframes scan {
+      0% { transform: translateY(-100%); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(100%); opacity: 0; }
+    }
+
+    /* Node pulse (map + modal) */
+    .node-pulse {
+      box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.8);
+      animation: nodePulse 2.4s ease-out infinite;
+    }
+
+    @keyframes nodePulse {
+      0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+      70% { box-shadow: 0 0 0 18px rgba(56, 189, 248, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+    }
+
+    /* Use case cards */
     .usecase-card {
       position: relative;
-      transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
       transform-style: preserve-3d;
-    }
-    .usecase-card:hover {
-      transform: translateY(-6px) rotateX(5deg) rotateY(-4deg) scale(1.02);
-      border-color: rgba(125, 211, 252, 0.4);
-      box-shadow: 0 14px 38px rgba(56, 189, 248, 0.25);
+      transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
     }
     .usecase-card::before {
       content: "";
       position: absolute;
       inset: 0;
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 2px;
-      background: linear-gradient(135deg, rgba(56,189,248,0.3), rgba(14,165,233,0.1));
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.35), rgba(14, 165, 233, 0.08));
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       mask-composite: exclude;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .usecase-card:hover {
+      transform: translateY(-6px) rotateX(4deg) rotateY(-4deg) scale(1.02);
+      box-shadow: 0 16px 45px rgba(56, 189, 248, 0.28);
+      border-color: rgba(148, 163, 184, 0.7);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.98));
     }
     .usecase-card:hover::before {
       opacity: 1;
     }
 
-    /* Boarding pass “digital ink” */
+    /* Digital ink text (boarding pass) */
     .digital-ink {
       opacity: 0;
       filter: blur(6px);
@@ -107,668 +155,1000 @@
     }
 
     .boarding-cinema {
-      transition: transform 0.7s ease, box-shadow 0.7s ease;
+      transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.8s ease;
       transform-origin: center;
     }
     .boarding-cinema:hover {
-      transform: rotateX(6deg) rotateY(-6deg) scale(1.02);
-      box-shadow: 0 18px 48px rgba(56, 189, 248, 0.35);
+      transform: rotateX(5deg) rotateY(-5deg) scale(1.02);
+      box-shadow: 0 25px 70px rgba(15, 23, 42, 0.9);
     }
 
-    .scan-bar {
-      animation: scanBar 2.2s linear infinite;
+    /* Small QR grid for boarding pass, no image needed */
+    .qr-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      gap: 1px;
+      width: 100%;
+      height: 100%;
     }
-    @keyframes scanBar {
-      0% { top: 0; opacity: 0; }
-      20% { opacity: 1; }
-      50% { top: 50%; opacity: 1; }
-      80% { opacity: 1; }
-      100% { top: 100%; opacity: 0; }
+    .qr-dot {
+      background: #020617;
     }
 
-    #particles {
-      position: absolute;
+    /* Modal backdrop */
+    #modal-backdrop {
+      backdrop-filter: blur(22px);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(3, 7, 18, 0.96));
+    }
+
+    /* Starfield canvas */
+    #starfield {
+      position: fixed;
       inset: 0;
-      z-index: 0;
+      z-index: -10;
       pointer-events: none;
+    }
+
+    /* Stop body scroll when modal open */
+    body.modal-open {
+      overflow: hidden;
     }
   </style>
 </head>
 
 <body>
-  <!-- Starfield background -->
-  <canvas id="starfield" class="fixed inset-0 -z-10 pointer-events-none"></canvas>
 
-  <!-- HEADER -->
-  <header class="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-xl border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-sky-400"></div>
-        <span class="font-semibold tracking-tight text-lg">Synk<span class="text-sky-400">.ai</span></span>
-      </div>
+<!-- =============================== -->
+<!--   GLOBAL BACKGROUND STARFIELD  -->
+<!-- =============================== -->
+<canvas id="starfield"></canvas>
 
-      <nav class="hidden md:flex gap-8 text-sm text-gray-300">
-        <a href="#how" class="hover:text-white">How it works</a>
-        <a href="#boarding-section" class="hover:text-white">Live trip</a>
-        <a href="#usecases" class="hover:text-white">Use Cases</a>
-        <a href="#before" class="hover:text-white">Before/After</a>
-        <a href="#vision" class="hover:text-white">Vision</a>
-      </nav>
-    </div>
-  </header>
+<!-- =============================== -->
+<!--            HEADER               -->
+<!-- =============================== -->
 
-  <!-- HERO -->
-  <section class="relative h-[100vh] flex items-center justify-center parallax overflow-hidden">
-    <canvas id="particles"></canvas>
-
-    <div class="absolute inset-0">
-      <!-- your hero background image -->
-      <img src="./assets/hero.png" class="w-full h-full object-cover opacity-50" alt="">
-      <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70 to-black/95"></div>
+<header class="fixed top-0 w-full z-40 bg-black/40 backdrop-blur-xl border-b border-slate-800/70">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-sky-400 shadow-lg shadow-sky-500/40"></div>
+      <span class="font-semibold tracking-tight text-lg">
+        Synk<span class="text-sky-400">.ai</span>
+      </span>
     </div>
 
-    <!-- Glows -->
-    <div class="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full bg-blue-500/20 blur-[140px] glow-pulse"></div>
-    <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-sky-400/20 blur-[130px] glow-pulse"></div>
+    <nav class="hidden md:flex gap-8 text-sm text-slate-300">
+      <a href="#how" class="hover:text-white transition-colors">How it works</a>
+      <a href="#usecases" class="hover:text-white transition-colors">Use Cases</a>
+      <a href="#before" class="hover:text-white transition-colors">Before / After</a>
+      <a href="#vision" class="hover:text-white transition-colors">Vision</a>
+    </nav>
+  </div>
+</header>
 
-    <div class="relative z-10 max-w-3xl text-center px-6">
-      <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6 reveal">
-        Your journeys, finally in sync with
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300">
-          Synk.ai
-        </span>
-      </h1>
+<!-- =============================== -->
+<!--           HERO SECTION          -->
+<!-- =============================== -->
 
-      <p class="text-gray-300 text-lg md:text-xl reveal">
-        The AI layer that orchestrates your entire travel experience — from cabs to flights to stays —
-        automatically, across every app.
-      </p>
+<section class="relative h-[100vh] flex items-center justify-center overflow-hidden pt-20 parallax">
 
-      <div class="mt-10 flex justify-center reveal">
-        <button id="open-modal" class="btn text-black font-semibold text-lg shadow-lg flex items-center gap-2">
-          Experience Synk
-          <span class="text-xl">⟶</span>
-        </button>
-      </div>
+  <!-- Soft glows -->
+  <div class="absolute top-[-120px] left-[-60px] w-[420px] h-[420px] rounded-full bg-sky-500/25 blur-[130px] glow-pulse"></div>
+  <div class="absolute bottom-[-140px] right-[-80px] w-[520px] h-[520px] rounded-full bg-blue-500/25 blur-[150px] glow-pulse"></div>
 
-      <p class="mt-4 text-xs text-gray-500 reveal">
-        One intent in. Fully synked journey out.
-      </p>
-    </div>
-  </section>
+  <!-- Subtle radial vignette -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(15,23,42,0.8),_rgba(0,0,0,1))] pointer-events-none"></div>
 
-  <!-- HOW IT WORKS -->
-  <section id="how" class="relative py-24 bg-gradient-to-b from-black/80 to-black/95 overflow-hidden">
-    <div class="absolute inset-0 opacity-20 pointer-events-none">
-      <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.4"/>
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
-      </svg>
-    </div>
-
-    <div class="relative max-w-7xl mx-auto px-6">
-      <div class="text-center max-w-3xl mx-auto mb-14">
-        <h2 class="text-4xl md:text-5xl font-extrabold mb-4 reveal">How Synk Works</h2>
-        <p class="text-gray-300 text-lg reveal">
-          Say the plan. Synk understands intent, synchronizes all apps, and manages the journey end-to-end.
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="glass p-6 reveal hover:scale-[1.02] transition-all cursor-default">
-          <div class="text-2xl font-bold text-blue-400 mb-2">1. Understand</div>
-          <p class="text-gray-300 text-sm">
-            You speak naturally. Synk processes intent, locations, times, preferences, and calendar context.
-          </p>
-        </div>
-        <div class="glass p-6 reveal hover:scale-[1.02] transition-all cursor-default">
-          <div class="text-2xl font-bold text-blue-400 mb-2">2. Plan</div>
-          <p class="text-gray-300 text-sm">
-            Synk finds the best options across flights, cabs, hotels & stays — then builds one synchronized itinerary.
-          </p>
-        </div>
-        <div class="glass p-6 reveal hover:scale-[1.02] transition-all cursor-default">
-          <div class="text-2xl font-bold text-blue-400 mb-2">3. Execute</div>
-          <p class="text-gray-300 text-sm">
-            Bookings, reschedules, re-timing for delays, and all transports are handled automatically.
-          </p>
-        </div>
-        <div class="glass p-6 reveal hover:scale-[1.02] transition-all cursor-default">
-          <div class="text-2xl font-bold text-blue-400 mb-2">4. Pay</div>
-          <p class="text-gray-300 text-sm">
-            Synk’s smart wallet picks the right card, applies offers, and stores receipts without you doing anything.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOARDING PASS SECTION -->
-  <section id="boarding-section"
-           class="w-full py-24 px-6 md:px-16 flex flex-col md:flex-row items-center justify-between gap-16 relative">
-
-    <div class="md:w-1/2 reveal">
-      <h2 class="text-5xl font-extrabold mb-6 bg-gradient-to-r from-sky-300 to-blue-500 text-transparent bg-clip-text leading-tight">
-        Travel that adapts<br>before you even know.
-      </h2>
-      <p class="text-lg text-gray-300 mb-4">
-        Synk monitors delays, reschedules, gate changes, traffic, and check-in windows — automatically.
-      </p>
-      <p class="text-lg text-gray-300 mb-6">
-        Your entire trip is always in sync. Cab ⇄ Flight ⇄ Hotel ⇄ Calendar — all orchestrated instantly.
-      </p>
-      <p class="text-xl font-semibold text-sky-300">
-        This is next-generation travel automation.
-      </p>
-    </div>
-
-    <div class="md:w-1/2 flex justify-center relative">
-      <div id="boarding-pass"
-           class="boarding-cinema w-[340px] md:w-[400px]
-                  bg-[#0f172a]/80 border border-sky-300/40
-                  rounded-3xl shadow-2xl p-6 text-slate-200
-                  backdrop-blur-2xl transform translate-y-16 opacity-0
-                  transition-all duration-[1200ms] ease-[cubic-bezier(.22,.61,.36,1)]
-                  relative overflow-hidden">
-
-        <div class="absolute -top-10 -left-10 w-40 h-40 bg-sky-400/25 blur-[90px] pointer-events-none"></div>
-
-        <div class="flex justify-between items-center mb-4 relative z-10">
-          <span class="tracking-[0.3em] text-[10px] text-sky-300">BOARDING PASS</span>
-          <div class="relative w-12 h-12 bg-white rounded-md overflow-hidden">
-            <img src="./assets/qr.png" class="w-full h-full opacity-90" alt="">
-            <div class="absolute left-0 w-full h-[3px] bg-sky-400 scan-bar"></div>
-          </div>
-        </div>
-
-        <div class="flex justify-between items-center mb-5 relative z-10">
-          <div>
-            <div id="bp-origin" class="text-4xl font-bold digital-ink">BOM</div>
-            <div class="text-xs text-slate-400">Mumbai</div>
-          </div>
-
-          <div class="relative w-24 h-10 mx-2">
-            <div class="absolute top-1/2 left-0 right-0 h-[2px] bg-slate-600/40"></div>
-            <div id="plane-icon"
-                 class="absolute -translate-y-1/2 text-xl transition-all duration-[2200ms] left-0">
-              ✈️
-            </div>
-          </div>
-
-          <div>
-            <div id="bp-destination" class="text-4xl font-bold digital-ink">DEL</div>
-            <div class="text-xs text-slate-400">New Delhi</div>
-          </div>
-        </div>
-
-        <div class="border-t border-white/10 my-4 relative z-10"></div>
-
-        <div class="grid grid-cols-2 gap-4 text-sm relative z-10">
-          <div>
-            <div class="text-xs text-slate-400">Flight</div>
-            <div id="bp-flight" class="font-semibold text-sky-300 digital-ink">AI 431</div>
-          </div>
-          <div>
-            <div class="text-xs text-slate-400">Gate</div>
-            <div id="bp-gate" class="font-semibold digital-ink">A7</div>
-          </div>
-          <div>
-            <div class="text-xs text-slate-400">Depart</div>
-            <div id="bp-time" class="font-semibold digital-ink">19:45</div>
-          </div>
-          <div>
-            <div class="text-xs text-slate-400">Seat</div>
-            <div id="bp-seat" class="font-semibold digital-ink">22A</div>
-          </div>
-        </div>
-
-        <div class="border-t border-white/10 my-4 relative z-10"></div>
-
-        <div class="text-[11px] text-slate-400 relative z-10">
-          Auto-updates based on Synk’s real-time orchestration.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ORCHESTRATION LAYER -->
-  <section class="relative py-28 bg-gradient-to-b from-black/95 to-[#05070d] overflow-hidden">
-    <div class="absolute -top-24 left-1/3 w-[600px] h-[600px] rounded-full bg-blue-500/10 blur-[160px] glow-pulse"></div>
-    <div class="absolute -bottom-24 right-1/3 w-[500px] h-[500px] rounded-full bg-sky-400/10 blur-[150px] glow-pulse"></div>
-
-    <div class="relative max-w-7xl mx-auto px-6">
-      <div class="text-center max-w-3xl mx-auto mb-14">
-        <h2 class="text-4xl md:text-5xl font-extrabold reveal">The AI Orchestration Layer</h2>
-        <p class="text-gray-300 text-lg reveal">
-          Synk connects with travel, mobility and payments APIs — synchronizing your world without manual input.
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="glass p-6 reveal hover:-translate-y-1 transition-all">
-          <div class="text-xl font-bold text-sky-400 mb-1">Cab</div>
-          <p class="text-gray-300 text-sm">
-            ETAs, surge awareness, dynamic scheduling, re-timing based on traffic.
-          </p>
-        </div>
-        <div class="glass p-6 reveal hover:-translate-y-1 transition-all">
-          <div class="text-xl font-bold text-sky-400 mb-1">Flights</div>
-          <p class="text-gray-300 text-sm">
-            Live status feeds trigger auto-reschedules and rearranged ground transport.
-          </p>
-        </div>
-        <div class="glass p-6 reveal hover:-translate-y-1 transition-all">
-          <div class="text-xl font-bold text-sky-400 mb-1">Hotels</div>
-          <p class="text-gray-300 text-sm">
-            Late arrival handling, auto check-in windows, synced with your itinerary.
-          </p>
-        </div>
-        <div class="glass p-6 reveal hover:-translate-y-1 transition-all">
-          <div class="text-xl font-bold text-sky-400 mb-1">Wallet</div>
-          <p class="text-gray-300 text-sm">
-            Best-offer card selection, auto-pay, consolidated receipts.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- USE CASES -->
-  <section id="usecases" class="relative py-28 overflow-hidden bg-black">
-    <div class="absolute inset-0 opacity-[0.06] pointer-events-none">
-      <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="diag" patternUnits="userSpaceOnUse" width="220" height="220">
-            <path d="M-50 110 L110 -50 L270 110" stroke="white" stroke-width="0.4" fill="none" />
-            <path d="M-50 160 L160 -50 L360 160" stroke="white" stroke-width="0.4" fill="none" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#diag)" />
-      </svg>
-    </div>
-
-    <div class="relative max-w-7xl mx-auto px-6">
-      <div class="text-center max-w-3xl mx-auto mb-14">
-        <h2 class="text-4xl md:text-5xl font-extrabold reveal">What Synk Can Do</h2>
-        <p class="text-gray-300 text-lg reveal">One intent. One assistant. One synchronized experience.</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-        <div class="usecase-card glass p-6 reveal group rounded-2xl">
-          <div class="font-bold text-blue-400 text-lg mb-2 group-hover:text-cyan-300 transition">
-            7 PM movie show
-          </div>
-          <p class="text-gray-300 text-sm">
-            Book tickets, sync cab timings, predict traffic, store entry codes — fully automated.
-          </p>
-        </div>
-
-        <div class="usecase-card glass p-6 reveal group rounded-2xl">
-          <div class="font-bold text-blue-400 text-lg mb-2 group-hover:text-cyan-300 transition">
-            Dinner plan
-          </div>
-          <p class="text-gray-300 text-sm">
-            Reserve a table, time your arrival, plan transport, auto-apply best payment offers.
-          </p>
-        </div>
-
-        <div class="usecase-card glass p-6 reveal group rounded-2xl">
-          <div class="font-bold text-blue-400 text-lg mb-2 group-hover:text-cyan-300 transition">
-            Multiple errands
-          </div>
-          <p class="text-gray-300 text-sm">
-            Synk dynamically reorders your route based on traffic, delays, and store timings.
-          </p>
-        </div>
-
-        <div class="usecase-card glass p-6 reveal group rounded-2xl">
-          <div class="font-bold text-blue-400 text-lg mb-2 group-hover:text-cyan-300 transition">
-            Weekend getaway
-          </div>
-          <p class="text-gray-300 text-sm">
-            Checks your calendar, picks ideal dates, syncs stays + transport into one flow.
-          </p>
-        </div>
-
-        <div class="usecase-card glass p-6 reveal group rounded-2xl">
-          <div class="font-bold text-blue-400 text-lg mb-2 group-hover:text-cyan-300 transition">
-            Full vacation
-          </div>
-          <p class="text-gray-300 text-sm">
-            Flights, hotels, cabs, events, attractions — Synk builds a full end-to-end itinerary.
-          </p>
-        </div>
-
-        <div class="usecase-card glass p-6 reveal group rounded-2xl">
-          <div class="font-bold text-blue-400 text-lg mb-2 group-hover:text-cyan-300 transition">
-            Meetings across city
-          </div>
-          <p class="text-gray-300 text-sm">
-            Predicts commute time, auto-books rides, adjusts calendar for delays & overruns.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BEFORE/AFTER -->
-  <section id="before" class="relative py-28 bg-gradient-to-b from-[#05070d] to-black overflow-hidden">
-    <div class="relative max-w-7xl mx-auto px-6">
-      <div class="text-center max-w-3xl mx-auto mb-14">
-        <h2 class="text-4xl md:text-5xl font-extrabold reveal">Before & After Synk</h2>
-        <p class="text-gray-300 text-lg reveal">What changes when the world runs around your intent?</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-10">
-        <div class="glass p-6 reveal">
-          <h3 class="text-xl font-semibold text-red-400 mb-4">Before Synk</h3>
-          <ul class="text-gray-300 space-y-3 text-sm">
-            <li>• 5 apps for a single trip</li>
-            <li>• Manually adjusting cab, flight, hotel</li>
-            <li>• Missing offers and loyalty benefits</li>
-            <li>• Re-entering the same info many times</li>
-            <li>• No single source of truth</li>
-          </ul>
-        </div>
-
-        <div class="glass p-6 reveal">
-          <h3 class="text-xl font-semibold text-green-400 mb-4">After Synk</h3>
-          <ul class="text-gray-300 space-y-3 text-sm">
-            <li>• One assistant manages everything</li>
-            <li>• Auto-reschedules and dynamic timing</li>
-            <li>• One synchronized itinerary</li>
-            <li>• Best payment option applied automatically</li>
-            <li>• Stress-free, intent-driven movement</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- VISION -->
-  <section id="vision" class="relative py-32 bg-black text-center overflow-hidden">
-    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-600/20 blur-[180px] glow-pulse"></div>
-
-    <div class="relative z-10 max-w-4xl mx-auto px-6">
-      <h2 class="text-4xl md:text-5xl font-extrabold reveal">
-        “The future of travel is self-managing.”
-      </h2>
-      <p class="text-gray-300 text-lg mt-6 reveal">
-        Synk.ai orchestrates every step so people can simply move.
-      </p>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="py-12 bg-black border-t border-white/10 text-center">
-    <p class="text-gray-400 text-sm">
-      © <span id="year"></span> Synk.ai — Built for Ken Disrupt 2025
+  <!-- Hero content -->
+  <div class="relative z-10 max-w-4xl text-center px-6">
+    <p class="text-xs md:text-sm uppercase tracking-[0.35em] text-sky-300/80 mb-4 reveal">
+      AI-NATIVE TRAVEL ORCHESTRATION
     </p>
-  </footer>
 
-  <!-- EXPERIENCE SYNK MODAL -->
-  <div id="modal-backdrop"
-       class="fixed inset-0 hidden bg-black/70 backdrop-blur-xl z-[999]"></div>
+    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 reveal">
+      Your journeys, finally
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-400 to-sky-300">
+        in sync.
+      </span>
+    </h1>
 
-  <div id="modal"
-       class="fixed inset-0 hidden z-[1000] flex justify-center items-center px-4">
-    <div class="glass relative w-full max-w-3xl rounded-3xl border border-white/20
-                bg-black/60 backdrop-blur-2xl shadow-2xl overflow-hidden">
+    <p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto reveal">
+      Synk.ai is the AI layer that listens to intent — “Pune on Friday” — and silently
+      coordinates cabs, flights, hotels, and payments across apps so your travel
+      just runs itself.
+    </p>
 
-      <div class="sticky top-0 z-50 bg-black/60 backdrop-blur-xl flex justify-between
-                  items-center px-6 py-4 border-b border-white/10">
-        <h3 class="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-sky-300
-                   bg-clip-text text-transparent">
-          Synk Orchestration Demo
-        </h3>
-        <button id="close-modal"
-                class="text-gray-300 hover:text-white text-2xl font-bold leading-none">&times;</button>
-      </div>
-
-      <div id="timeline" class="max-h-[70vh] overflow-y-auto px-8 py-8 space-y-6"></div>
-
-      <div class="sticky bottom-0 z-50 bg-black/60 backdrop-blur-xl px-6 py-4 border-t border-white/10 text-center">
-        <button id="close-modal-bottom"
-                class="btn text-black font-semibold shadow-xl px-6 py-3">
-          Close
-        </button>
-      </div>
+    <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 reveal">
+      <button id="open-modal" class="btn-primary text-black flex items-center gap-2">
+        Experience Synk
+        <span class="text-xl">↗</span>
+      </button>
+      <span class="text-xs text-slate-400">
+        No app-hopping. No manual reschedules. No missed offers.
+      </span>
     </div>
   </div>
 
-  <!-- SCRIPTS -->
-  <script>
-    // YEAR
-    document.getElementById("year").textContent = new Date().getFullYear();
+  <!-- Hero particles canvas -->
+  <canvas id="particles" class="absolute inset-0 pointer-events-none"></canvas>
 
-    // REVEAL
-    const revealEls = document.querySelectorAll(".reveal");
-    const io = new IntersectionObserver((entries) => {
+</section>
+
+<!-- =============================== -->
+<!--       HOW SYNK WORKS           -->
+<!-- =============================== -->
+
+<section id="how" class="relative py-24 bg-gradient-to-b from-black/90 to-black/95 overflow-hidden">
+
+  <!-- Grid background -->
+  <div class="absolute inset-0 opacity-25 pointer-events-none">
+    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(148,163,184,0.25)" stroke-width="0.4"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid)" />
+    </svg>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6">
+
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-4xl md:text-5xl font-extrabold mb-4 reveal">
+        How Synk works
+      </h2>
+      <p class="text-slate-300 text-lg reveal">
+        You say the plan once. Synk understands intent, talks to every system, and keeps your journey perfectly in sync.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+      <div class="glass p-6 reveal">
+        <div class="text-2xl font-bold text-sky-400 mb-2">1. Understand</div>
+        <p class="text-slate-300 text-sm">
+          Synk parses plain-English instructions, locations, dates, times, and preferences — plus your calendar context.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal">
+        <div class="text-2xl font-bold text-sky-400 mb-2">2. Plan</div>
+        <p class="text-slate-300 text-sm">
+          It finds the best options across flights, cabs, and stays, then builds one synchronized itinerary with buffers.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal">
+        <div class="text-2xl font-bold text-sky-400 mb-2">3. Execute</div>
+        <p class="text-slate-300 text-sm">
+          Bookings happen in the background. If anything slips — delays, traffic, gate changes — Synk auto-adjusts the rest.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal">
+        <div class="text-2xl font-bold text-sky-400 mb-2">4. Pay</div>
+        <p class="text-slate-300 text-sm">
+          The smart wallet picks the right card, applies offers, and shoves every receipt into one clean timeline.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!--     BOARDING PASS CINEMATIC    -->
+<!-- =============================== -->
+
+<section id="boarding-section"
+         class="relative w-full py-24 px-6 md:px-16 flex flex-col md:flex-row items-center justify-between gap-16 overflow-hidden">
+
+  <!-- glow -->
+  <div class="absolute -left-32 top-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full bg-sky-500/15 blur-[140px]"></div>
+
+  <!-- LEFT TEXT -->
+  <div class="relative md:w-1/2 reveal z-10">
+    <p class="text-xs tracking-[0.25em] text-sky-300/80 uppercase mb-3">
+      LIVE ORCHESTRATION
+    </p>
+    <h2 class="text-4xl md:text-5xl font-extrabold mb-6 bg-gradient-to-r from-sky-300 to-blue-500 text-transparent bg-clip-text leading-tight">
+      Travel that adapts<br>before you even know.
+    </h2>
+
+    <p class="text-slate-300 text-lg mb-4">
+      Synk keeps watching the moving parts — delays, traffic, gate changes, check-in windows —
+      and silently reshapes the plan for you.
+    </p>
+
+    <p class="text-slate-300 text-lg mb-6">
+      Cab ⇄ Flight ⇄ Hotel ⇄ Calendar.  
+      Every node updates. You don’t lift a finger.
+    </p>
+
+    <p class="text-sky-300 text-lg font-semibold">
+      This is what “self-managing travel” actually feels like.
+    </p>
+  </div>
+
+  <!-- RIGHT BOARDING PASS -->
+  <div class="relative md:w-1/2 flex justify-center z-10">
+
+    <div id="boarding-pass"
+         class="boarding-cinema w-[340px] md:w-[400px]
+                bg-slate-950/80 border border-sky-300/40
+                rounded-3xl shadow-[0_28px_80px_rgba(15,23,42,0.95)]
+                p-6 text-slate-200
+                backdrop-blur-2xl transform translate-y-20 opacity-0
+                transition-all duration-[1400ms] ease-[cubic-bezier(.22,.61,.36,1)]
+                relative overflow-hidden">
+
+      <!-- big glow -->
+      <div class="absolute -top-16 -left-14 w-44 h-44 bg-sky-400/30 blur-[90px] pointer-events-none"></div>
+
+      <!-- HEADER -->
+      <div class="relative flex justify-between items-center mb-4">
+        <div class="flex flex-col gap-1">
+          <span class="tracking-[0.28em] text-[10px] text-sky-300/80 uppercase">
+            Boarding pass
+          </span>
+          <span class="text-xs text-slate-400">
+            Synk.ai • Live orchestration
+          </span>
+        </div>
+
+        <!-- QR-like grid -->
+        <div class="relative w-12 h-12 bg-slate-100 rounded-md overflow-hidden">
+          <div class="qr-grid p-1">
+            <div class="qr-dot"></div><div></div><div class="qr-dot"></div><div></div><div class="qr-dot"></div><div></div>
+            <div></div><div class="qr-dot"></div><div></div><div class="qr-dot"></div><div></div><div class="qr-dot"></div>
+            <div class="qr-dot"></div><div></div><div></div><div class="qr-dot"></div><div></div><div class="qr-dot"></div>
+            <div></div><div class="qr-dot"></div><div class="qr-dot"></div><div></div><div></div><div class="qr-dot"></div>
+            <div class="qr-dot"></div><div></div><div></div><div class="qr-dot"></div><div class="qr-dot"></div><div></div>
+            <div></div><div class="qr-dot"></div><div></div><div></div><div class="qr-dot"></div><div class="qr-dot"></div>
+          </div>
+          <div class="absolute top-0 left-0 w-full h-[3px] bg-sky-400/90"></div>
+        </div>
+      </div>
+
+      <!-- ORIGIN / DESTINATION -->
+      <div class="relative flex justify-between items-center mb-5">
+        <div>
+          <div id="bp-origin" class="text-4xl font-extrabold tracking-tight digital-ink">BOM</div>
+          <div class="text-[11px] text-slate-400">Mumbai</div>
+        </div>
+
+        <div class="relative w-28 h-10 mx-3">
+          <div class="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-600/40"></div>
+          <div class="absolute top-1/2 left-0 right-0 flex justify-between">
+            <span class="w-1 h-1 rounded-full bg-sky-400/80"></span>
+            <span class="w-1 h-1 rounded-full bg-sky-400/80"></span>
+          </div>
+          <div id="plane-icon"
+               class="absolute -translate-y-1/2 text-xl transition-all duration-[1800ms] ease-[cubic-bezier(.22,.61,.36,1)]">
+            ✈️
+          </div>
+        </div>
+
+        <div class="text-right">
+          <div id="bp-destination" class="text-4xl font-extrabold tracking-tight digital-ink">DEL</div>
+          <div class="text-[11px] text-slate-400">New Delhi</div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-700/60 my-4"></div>
+
+      <!-- DETAILS GRID -->
+      <div class="grid grid-cols-2 gap-4 text-sm mb-2">
+        <div>
+          <div class="text-[11px] uppercase tracking-wide text-slate-400">Flight</div>
+          <div id="bp-flight" class="font-semibold text-sky-300 digital-ink">AI 431</div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-wide text-slate-400">Gate</div>
+          <div id="bp-gate" class="font-semibold digital-ink">A7</div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-wide text-slate-400">Departure</div>
+          <div id="bp-time" class="font-semibold digital-ink">19:45</div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-wide text-slate-400">Seat</div>
+          <div id="bp-seat" class="font-semibold digital-ink">22A</div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mt-3">
+        <div class="text-[11px] text-slate-400 max-w-[70%]">
+          Auto-updates as Synk reacts to live delays, traffic, and gate changes — in real time.
+        </div>
+        <div class="text-[10px] text-sky-300/80 uppercase tracking-[0.2em]">
+          Synked
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!--  UNDER THE HOOD: ORCHESTRATION  -->
+<!-- =============================== -->
+
+<section class="relative py-28 bg-gradient-to-b from-black via-[#020617] to-black overflow-hidden">
+
+  <div class="absolute -top-24 left-1/3 w-[500px] h-[500px] rounded-full bg-blue-500/14 blur-[160px]"></div>
+  <div class="absolute -bottom-24 right-1/3 w-[420px] h-[420px] rounded-full bg-sky-400/12 blur-[150px]"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6">
+
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-4xl md:text-5xl font-extrabold reveal">
+        One AI layer, all your rails.
+      </h2>
+      <p class="text-slate-300 text-lg reveal">
+        Synk talks to cabs, flights, hotels, wallets, and calendars so you don’t have to.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+      <div class="glass p-6 reveal">
+        <div class="text-xl font-bold text-sky-300 mb-1">Cab</div>
+        <p class="text-slate-300 text-sm">
+          Monitors ETAs, surge, and traffic. Syncs pickup times when your flight or event shifts.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal">
+        <div class="text-xl font-bold text-sky-300 mb-1">Flights</div>
+        <p class="text-slate-300 text-sm">
+          Uses live feeds to trigger rebooking, seat changes, and cab re-alignments if delays stack up.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal">
+        <div class="text-xl font-bold text-sky-300 mb-1">Hotels</div>
+        <p class="text-slate-300 text-sm">
+          Adjusts check-in windows, late arrivals, and special requests based on your updated ETA.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal">
+        <div class="text-xl font-bold text-sky-300 mb-1">Wallet</div>
+        <p class="text-slate-300 text-sm">
+          Picks the best card or UPI for offers, tracks spends, and keeps all receipts in one place.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!--           USE CASES             -->
+<!-- =============================== -->
+
+<section id="usecases" class="relative py-28 overflow-hidden bg-black">
+
+  <!-- diagonal lines -->
+  <div class="absolute inset-0 opacity-[0.06] pointer-events-none">
+    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="diag" patternUnits="userSpaceOnUse" width="220" height="220">
+          <path d="M-50 110 L110 -50 L270 110" stroke="rgba(148,163,184,0.5)" stroke-width="0.4" fill="none" />
+          <path d="M-50 160 L160 -50 L360 160" stroke="rgba(148,163,184,0.35)" stroke-width="0.4" fill="none" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#diag)" />
+    </svg>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6">
+
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-4xl md:text-5xl font-extrabold reveal">
+        What Synk can do
+      </h2>
+      <p class="text-slate-300 text-lg reveal">
+        From a 7 PM movie to a 10-day vacation — one intent, one assistant, one synchronized experience.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+      <div class="usecase-card glass p-6 reveal group rounded-2xl">
+        <div class="font-bold text-sky-300 text-lg mb-2 group-hover:text-cyan-300 transition">
+          7 PM movie show
+        </div>
+        <p class="text-slate-300 text-sm mb-3">
+          Synk books tickets, lines up the cab, anticipates traffic, and stores entry QR codes.
+        </p>
+        <p class="text-[11px] text-slate-400 uppercase tracking-[0.12em]">
+          From “let’s go” to “we’re seated”, fully sync’d.
+        </p>
+      </div>
+
+      <div class="usecase-card glass p-6 reveal group rounded-2xl">
+        <div class="font-bold text-sky-300 text-lg mb-2 group-hover:text-cyan-300 transition">
+          Dinner plan
+        </div>
+        <p class="text-slate-300 text-sm mb-3">
+          Reserves the table, books your ride, times arrival, and applies the best payment offer.
+        </p>
+        <p class="text-[11px] text-slate-400 uppercase tracking-[0.12em]">
+          Just show up. Synk handles the logistics.
+        </p>
+      </div>
+
+      <div class="usecase-card glass p-6 reveal group rounded-2xl">
+        <div class="font-bold text-sky-300 text-lg mb-2 group-hover:text-cyan-300 transition">
+          Multiple errands
+        </div>
+        <p class="text-slate-300 text-sm mb-3">
+          Reorders your route live based on traffic, closures, and store timings — not static maps.
+        </p>
+        <p class="text-[11px] text-slate-400 uppercase tracking-[0.12em]">
+          Your day, rearranged in real time.
+        </p>
+      </div>
+
+      <div class="usecase-card glass p-6 reveal group rounded-2xl">
+        <div class="font-bold text-sky-300 text-lg mb-2 group-hover:text-cyan-300 transition">
+          Weekend getaway
+        </div>
+        <p class="text-slate-300 text-sm mb-3">
+          Checks calendars, suggests dates, books stays and transport, and syncs everything end-to-end.
+        </p>
+        <p class="text-[11px] text-slate-400 uppercase tracking-[0.12em]">
+          From empty weekend to ready-to-go.
+        </p>
+      </div>
+
+      <div class="usecase-card glass p-6 reveal group rounded-2xl">
+        <div class="font-bold text-sky-300 text-lg mb-2 group-hover:text-cyan-300 transition">
+          Full vacation
+        </div>
+        <p class="text-slate-300 text-sm mb-3">
+          Flights, stays, airport transfers, attractions, restaurant reservations — all built into one living itinerary.
+        </p>
+        <p class="text-[11px] text-slate-400 uppercase tracking-[0.12em]">
+          You decide the vibe. Synk designs the rails.
+        </p>
+      </div>
+
+      <div class="usecase-card glass p-6 reveal group rounded-2xl">
+        <div class="font-bold text-sky-300 text-lg mb-2 group-hover:text-cyan-300 transition">
+          Meetings across the city
+        </div>
+        <p class="text-slate-300 text-sm mb-3">
+          Predicts commute times, auto-books rides between meetings, and adjusts your calendar when overruns happen.
+        </p>
+        <p class="text-[11px] text-slate-400 uppercase tracking-[0.12em]">
+          Your day of hops, orchestrated around you.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!--         BEFORE / AFTER          -->
+<!-- =============================== -->
+
+<section id="before" class="relative py-28 bg-gradient-to-b from-[#020617] to-black overflow-hidden">
+
+  <div class="relative max-w-7xl mx-auto px-6">
+
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-4xl md:text-5xl font-extrabold reveal">
+        Before vs after Synk
+      </h2>
+      <p class="text-slate-300 text-lg reveal">
+        What changes when your intent becomes the operating system?
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-10">
+
+      <div class="glass p-6 reveal">
+        <h3 class="text-xl font-semibold text-red-400 mb-4">Before Synk</h3>
+        <ul class="text-slate-300 space-y-3 text-sm">
+          <li>• 4–6 apps for one trip</li>
+          <li>• Manually re-timing cabs, flights, and check-ins</li>
+          <li>• Re-entering the same info across platforms</li>
+          <li>• Offers and loyalty scattered everywhere</li>
+          <li>• No single source of truth when things move</li>
+        </ul>
+      </div>
+
+      <div class="glass p-6 reveal">
+        <h3 class="text-xl font-semibold text-emerald-400 mb-4">After Synk</h3>
+        <ul class="text-slate-300 space-y-3 text-sm">
+          <li>• One intent, one assistant, one flow</li>
+          <li>• Auto-reschedules across cab ⇄ flight ⇄ hotel</li>
+          <li>• One synchronized journey timeline</li>
+          <li>• Best payment option auto-applied</li>
+          <li>• You move. Synk handles the chaos.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!--             VISION              -->
+<!-- =============================== -->
+
+<section id="vision" class="relative py-32 bg-black text-center overflow-hidden">
+
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-600/26 blur-[180px] glow-pulse"></div>
+
+  <div class="relative z-10 max-w-4xl mx-auto px-6">
+    <h2 class="text-4xl md:text-5xl font-extrabold reveal">
+      “The future of travel is self-managing.”
+    </h2>
+    <p class="text-slate-300 text-lg mt-6 reveal">
+      Synk.ai is the invisible layer that keeps your journeys coherent — so you can stop managing trips, and just move.
+    </p>
+  </div>
+
+</section>
+
+<!-- =============================== -->
+<!--      SYNK ORCHESTRATION MAP    -->
+<!-- =============================== -->
+
+<section id="synk-map" class="relative py-28 bg-gradient-to-b from-black via-[#020617] to-black overflow-hidden">
+
+  <div class="absolute inset-0 opacity-20 pointer-events-none">
+    <div class="absolute w-[600px] h-[600px] rounded-full bg-sky-500/18 blur-[200px] top-1/4 left-1/3"></div>
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-blue-500/16 blur-[200px] bottom-1/4 right-1/3"></div>
+  </div>
+
+  <div class="relative max-w-6xl mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <h2 class="text-3xl md:text-4xl font-extrabold reveal">
+        The Synk orchestration map
+      </h2>
+      <p class="text-slate-300 mt-3 reveal">
+        One intent flows through Synk’s AI layer and reshapes every node in your journey.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-[1.3fr,1fr] gap-10 items-center">
+
+      <!-- Map diagram -->
+      <div class="glass p-6 md:p-8 reveal">
+        <div class="flex flex-col items-center gap-6">
+
+          <!-- Center node -->
+          <div class="flex flex-col items-center">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-sky-400 node-pulse flex items-center justify-center text-sm font-semibold">
+              Synk.ai
+            </div>
+            <p class="mt-3 text-xs text-slate-300 text-center max-w-xs">
+              Intent in, synchronized journey out.
+            </p>
+          </div>
+
+          <!-- Rings / nodes -->
+          <div class="w-full max-w-xl mt-2">
+            <div class="flex items-center justify-between text-xs text-slate-200 mb-4">
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Intent</span>
+              </div>
+              <div class="flex-1 h-px mx-1 bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-70"></div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Calendar</span>
+              </div>
+              <div class="flex-1 h-px mx-1 bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-70"></div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Cab</span>
+              </div>
+              <div class="flex-1 h-px mx-1 bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-70"></div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Flight</span>
+              </div>
+              <div class="flex-1 h-px mx-1 bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-70"></div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Hotel</span>
+              </div>
+              <div class="flex-1 h-px mx-1 bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-70"></div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+                <span>Wallet</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-400 text-center mt-4">
+              Synk coordinates every node in this chain — so users feel one smooth, living experience instead of disconnected apps.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text explainer -->
+      <div class="space-y-4 text-sm text-slate-300 reveal">
+        <div class="glass p-4">
+          <h3 class="font-semibold text-sky-300 mb-1">Intent as the API</h3>
+          <p>Users talk in natural language. Synk treats that intent as the master contract all systems align to.</p>
+        </div>
+        <div class="glass p-4">
+          <h3 class="font-semibold text-sky-300 mb-1">Calendar-aware decisions</h3>
+          <p>Every booking is evaluated against your commitments, buffers, and preferences before it happens.</p>
+        </div>
+        <div class="glass p-4">
+          <h3 class="font-semibold text-sky-300 mb-1">All nodes synchronized</h3>
+          <p>Cabs align to flights, hotels align to real arrival windows, and payments align to benefits — centrally orchestrated.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!--              FOOTER             -->
+<!-- =============================== -->
+
+<footer class="py-12 bg-black border-t border-slate-800/70 text-center">
+  <p class="text-slate-400 text-sm">
+    © <span id="year"></span> Synk.ai — Built for Ken Disrupt 2025
+  </p>
+</footer>
+
+<!-- =============================== -->
+<!--      CINEMATIC SYNK MODAL      -->
+<!-- =============================== -->
+
+<div id="modal-backdrop"
+     class="fixed inset-0 hidden z-[900] flex justify-center items-center px-4">
+
+  <div id="modal"
+       class="glass relative w-full max-w-3xl rounded-2xl bg-black/70 border border-slate-700 shadow-2xl overflow-hidden">
+
+    <!-- Hologram scan overlay -->
+    <div class="scan-bar"></div>
+
+    <!-- TOP BAR -->
+    <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-xl flex justify-between items-center px-6 py-4 border-b border-slate-700">
+      <h3 class="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
+        Synk Orchestration Demo
+      </h3>
+      <button id="close-modal"
+              class="text-slate-300 hover:text-white text-2xl font-bold leading-none">&times;</button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="max-h-[70vh] overflow-y-auto px-8 py-6 space-y-6">
+
+      <!-- MINI ORCHESTRATION ROW -->
+      <div>
+        <div class="text-[11px] uppercase tracking-[0.25em] text-sky-300 mb-3">
+          Route overview
+        </div>
+        <div class="flex items-center justify-between gap-2 text-[11px] text-slate-200">
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Intent</span>
+          </div>
+          <div class="flex-1 h-px bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-80"></div>
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Calendar</span>
+          </div>
+          <div class="flex-1 h-px bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-80"></div>
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Cab</span>
+          </div>
+          <div class="flex-1 h-px bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-80"></div>
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Flight</span>
+          </div>
+          <div class="flex-1 h-px bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-80"></div>
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Hotel</span>
+          </div>
+          <div class="flex-1 h-px bg-gradient-to-r from-blue-500 via-sky-400 to-blue-500 opacity-80"></div>
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-3 h-3 rounded-full bg-sky-400 node-pulse"></div>
+            <span>Wallet</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div id="timeline" class="space-y-6 text-slate-200 text-sm md:text-base font-medium"></div>
+
+      <!-- CLOSING LINE -->
+      <div class="mt-6 text-center text-sky-200 text-sm md:text-base">
+        <span class="font-semibold">
+          That’s your journey, fully SYNKED —
+        </span>
+        <span class="text-slate-200">
+          effortless, intelligent, seamless.
+        </span>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM CLOSE BUTTON -->
+    <div class="sticky bottom-0 z-50 bg-black/80 backdrop-blur-xl px-6 py-4 border-t border-slate-700 text-center">
+      <button id="close-modal-bottom"
+              class="btn-primary text-black font-semibold text-sm md:text-base px-6 py-3">
+        Close
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- =============================== -->
+<!--             SCRIPTS             -->
+<!-- =============================== -->
+
+<script>
+  // CURRENT YEAR
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // REVEAL ANIMATIONS
+  const revealEls = document.querySelectorAll(".reveal");
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.18 });
+  revealEls.forEach((el) => io.observe(el));
+
+  // SMOOTH SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute("href"));
+      if (!target) return;
+      window.scrollTo({
+        top: target.offsetTop - 70,
+        behavior: "smooth"
+      });
+    });
+  });
+
+  // PARALLAX (hero)
+  document.addEventListener("mousemove", (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+    const section = document.querySelector("section.parallax");
+    if (section) {
+      section.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    }
+  });
+
+  // PARTICLE ENGINE (hero)
+  const canvas = document.getElementById("particles");
+  if (canvas) {
+    const ctx = canvas.getContext("2d");
+    let w, h, particles;
+
+    function initParticles() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      particles = Array.from({ length: 90 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 2 + 0.5,
+        dx: (Math.random() - 0.5) * 0.25,
+        dy: (Math.random() - 0.5) * 0.25,
+        alpha: Math.random() * 0.6 + 0.2
+      }));
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach((p) => {
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0) p.x = w;
+        if (p.x > w) p.x = 0;
+        if (p.y < 0) p.y = h;
+        if (p.y > h) p.y = 0;
+
+        ctx.beginPath();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = "#60a5fa";
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    window.addEventListener("resize", initParticles);
+    initParticles();
+    animateParticles();
+  }
+
+  // STARFIELD BACKGROUND (global)
+  const starCanvas = document.getElementById("starfield");
+  if (starCanvas) {
+    const sctx = starCanvas.getContext("2d");
+    let sw, sh, stars;
+
+    function initStars() {
+      sw = starCanvas.width = window.innerWidth;
+      sh = starCanvas.height = window.innerHeight;
+      stars = Array.from({ length: 130 }, () => ({
+        x: Math.random() * sw,
+        y: Math.random() * sh,
+        r: Math.random() * 1.4 + 0.2,
+        dx: (Math.random() - 0.5) * 0.1,
+        dy: (Math.random() - 0.5) * 0.1,
+        alpha: Math.random() * 0.9 + 0.1
+      }));
+    }
+
+    function drawStars() {
+      sctx.clearRect(0, 0, sw, sh);
+      stars.forEach((s) => {
+        s.x += s.dx;
+        s.y += s.dy;
+        if (s.x < 0) s.x = sw;
+        if (s.x > sw) s.x = 0;
+        if (s.y < 0) s.y = sh;
+        if (s.y > sh) s.y = 0;
+
+        sctx.beginPath();
+        sctx.globalAlpha = s.alpha;
+        sctx.fillStyle = "#94a3b8";
+        sctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        sctx.fill();
+      });
+      requestAnimationFrame(drawStars);
+    }
+
+    window.addEventListener("resize", initStars);
+    initStars();
+    drawStars();
+  }
+
+  // MODAL LOGIC
+  const modalBackdropEl = document.getElementById("modal-backdrop");
+  const modalEl = document.getElementById("modal");
+  const openModalEl = document.getElementById("open-modal");
+  const closeModalEl = document.getElementById("close-modal");
+  const closeModalBottomEl = document.getElementById("close-modal-bottom");
+  const timelineEl = document.getElementById("timeline");
+  const body = document.body;
+
+  const steps = [
+    "Understanding your intent — location, time, flexibility, companions, and preferences.",
+    "Reading your calendar to avoid clashes, tight connections, and hidden constraints.",
+    "Scouting the best options across flights, trains, cabs, and stays for your context.",
+    "Building one synchronized itinerary with buffers where they matter most.",
+    "Locking in bookings while writing back confirmations to your calendar.",
+    "Subscribing to live signals: delays, gate changes, traffic, hotel constraints.",
+    "Re-orchestrating: rebooking when needed, retiming cabs, nudging check-ins automatically.",
+    "Reconciling payments, offers, and receipts into a single, coherent journey log."
+  ];
+
+  let stepIndex = 0;
+  let interval = null;
+
+  function playTimeline() {
+    timelineEl.innerHTML = "";
+    stepIndex = 0;
+    interval = setInterval(() => {
+      if (stepIndex >= steps.length) {
+        clearInterval(interval);
+        return;
+      }
+      const line = document.createElement("div");
+      line.className =
+        "opacity-0 translate-y-2 transition-all duration-700 bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-lg shadow-lg";
+      line.innerHTML = `
+        <div class="text-sky-300 font-semibold mb-1 text-xs md:text-sm">Step ${stepIndex + 1}</div>
+        <div class="text-sm md:text-base">${steps[stepIndex]}</div>
+      `;
+      timelineEl.appendChild(line);
+      setTimeout(() => {
+        line.classList.remove("opacity-0", "translate-y-2");
+      }, 50);
+      stepIndex++;
+    }, 650);
+  }
+
+  function openModal() {
+    modalBackdropEl.classList.remove("hidden");
+    body.classList.add("modal-open");
+    playTimeline();
+  }
+
+  function closeModalNow() {
+    modalBackdropEl.classList.add("hidden");
+    body.classList.remove("modal-open");
+    timelineEl.innerHTML = "";
+    clearInterval(interval);
+  }
+
+  if (openModalEl) openModalEl.onclick = openModal;
+  if (closeModalEl) closeModalEl.onclick = closeModalNow;
+  if (closeModalBottomEl) closeModalBottomEl.onclick = closeModalNow;
+  if (modalBackdropEl) {
+    modalBackdropEl.addEventListener("click", (e) => {
+      if (e.target === modalBackdropEl) {
+        closeModalNow();
+      }
+    });
+  }
+
+  // HYPER-CINEMATIC BOARDING PASS
+  function playBoardingPassCinematic() {
+    const pass = document.getElementById("boarding-pass");
+    const plane = document.getElementById("plane-icon");
+    const inks = document.querySelectorAll(".digital-ink");
+
+    if (!pass || !plane) return;
+
+    // Slide up intro
+    setTimeout(() => {
+      pass.classList.remove("translate-y-20", "opacity-0");
+      pass.classList.add("translate-y-0", "opacity-100");
+    }, 120);
+
+    // Digital ink reveal stagger
+    inks.forEach((el, i) => {
+      setTimeout(() => el.classList.add("show"), 320 + i * 200);
+    });
+
+    // Plane animation (moves across)
+    setTimeout(() => {
+      plane.style.left = "0%";
+      setTimeout(() => {
+        plane.style.left = "78%";
+      }, 40);
+    }, 480);
+
+    // Randomize details safely
+    const flights = ["AI 431", "UK 811", "6E 502", "SG 902", "G8 311"];
+    const gates   = ["A7", "B4", "C12", "D3", "A2"];
+    const times   = ["19:45", "20:10", "18:30", "22:15", "21:05"];
+    const seats   = ["22A", "14C", "9F", "18B", "7A"];
+
+    const bpFlight = document.getElementById("bp-flight");
+    const bpGate   = document.getElementById("bp-gate");
+    const bpTime   = document.getElementById("bp-time");
+    const bpSeat   = document.getElementById("bp-seat");
+
+    if (bpFlight) bpFlight.textContent = flights[Math.floor(Math.random() * flights.length)];
+    if (bpGate)   bpGate.textContent   = gates[Math.floor(Math.random() * gates.length)];
+    if (bpTime)   bpTime.textContent   = times[Math.floor(Math.random() * times.length)];
+    if (bpSeat)   bpSeat.textContent   = seats[Math.floor(Math.random() * seats.length)];
+  }
+
+  const boardingPassEl = document.getElementById("boarding-pass");
+  if (boardingPassEl) {
+    const bpObs = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.2 });
-    revealEls.forEach((el) => io.observe(el));
-
-    // SMOOTH SCROLL
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        const target = document.querySelector(link.getAttribute("href"));
-        if (!target) return;
-        window.scrollTo({
-          top: target.offsetTop - 70,
-          behavior: "smooth"
-        });
-      });
-    });
-
-    // PARALLAX HERO
-    document.addEventListener("mousemove", (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 30;
-      const y = (e.clientY / window.innerHeight - 0.5) * 30;
-      const hero = document.querySelector(".parallax");
-      if (hero) {
-        hero.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      }
-    });
-
-    // HERO PARTICLES
-    const canvas = document.getElementById("particles");
-    if (canvas) {
-      const ctx = canvas.getContext("2d");
-      let w, h, particles;
-
-      function initParticles() {
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-        particles = Array.from({ length: 80 }, () => ({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          r: Math.random() * 2 + 0.5,
-          dx: (Math.random() - 0.5) * 0.25,
-          dy: (Math.random() - 0.5) * 0.25
-        }));
-      }
-
-      function animateParticles() {
-        ctx.clearRect(0, 0, w, h);
-        particles.forEach((p) => {
-          p.x += p.dx;
-          p.y += p.dy;
-
-          if (p.x < 0) p.x = w;
-          if (p.x > w) p.x = 0;
-          if (p.y < 0) p.y = h;
-          if (p.y > h) p.y = 0;
-
-          ctx.beginPath();
-          ctx.fillStyle = "#60a5fa";
-          ctx.globalAlpha = 0.5;
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fill();
-        });
-        requestAnimationFrame(animateParticles);
-      }
-
-      window.addEventListener("resize", initParticles);
-      initParticles();
-      animateParticles();
-    }
-
-    // STARFIELD
-    const starCanvas = document.getElementById("starfield");
-    if (starCanvas) {
-      const sctx = starCanvas.getContext("2d");
-      let sw, sh, stars;
-
-      function initStars() {
-        sw = starCanvas.width = window.innerWidth;
-        sh = starCanvas.height = window.innerHeight;
-        stars = Array.from({ length: 120 }, () => ({
-          x: Math.random() * sw,
-          y: Math.random() * sh,
-          r: Math.random() * 1.4 + 0.2,
-          dx: (Math.random() - 0.5) * 0.12,
-          dy: (Math.random() - 0.5) * 0.12,
-          alpha: Math.random() * 0.8 + 0.2
-        }));
-      }
-
-      function drawStars() {
-        sctx.clearRect(0, 0, sw, sh);
-        stars.forEach((s) => {
-          s.x += s.dx;
-          s.y += s.dy;
-          if (s.x < 0) s.x = sw;
-          if (s.x > sw) s.x = 0;
-          if (s.y < 0) s.y = sh;
-          if (s.y > sh) s.y = 0;
-
-          sctx.beginPath();
-          sctx.globalAlpha = s.alpha;
-          sctx.fillStyle = "#94a3b8";
-          sctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          sctx.fill();
-        });
-        requestAnimationFrame(drawStars);
-      }
-
-      window.addEventListener("resize", initStars);
-      initStars();
-      drawStars();
-    }
-
-    // EXPERIENCE SYNK MODAL
-    const modalBackdropEl = document.getElementById("modal-backdrop");
-    const modalEl = document.getElementById("modal");
-    const openModalEl = document.getElementById("open-modal");
-    const closeModalEl = document.getElementById("close-modal");
-    const closeModalBottomEl = document.getElementById("close-modal-bottom");
-    const timelineEl = document.getElementById("timeline");
-
-    const steps = [
-      "Understanding your intent…",
-      "Parsing location, date & context…",
-      "Scanning calendar for conflicts…",
-      "Finding best transport options…",
-      "Synchronizing cab ⇄ flight ⇄ hotel timings…",
-      "Predicting delays & disruptions…",
-      "Applying best payment method…",
-      "Your journey has been fully synked."
-    ];
-
-    let stepIndex = 0;
-    let interval = null;
-
-    function startTimeline() {
-      timelineEl.innerHTML = "";
-      stepIndex = 0;
-
-      interval = setInterval(() => {
-        if (stepIndex >= steps.length) {
-          clearInterval(interval);
-          return;
-        }
-
-        const line = document.createElement("div");
-        line.className =
-          "opacity-0 translate-y-2 transition-all duration-800 bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-lg shadow-lg";
-
-        line.innerHTML = `
-          <div class="text-blue-300 font-semibold mb-1">Step ${stepIndex + 1}</div>
-          <div>${steps[stepIndex]}</div>
-        `;
-
-        timelineEl.appendChild(line);
-
-        setTimeout(() => {
-          line.classList.remove("opacity-0", "translate-y-2");
-        }, 50);
-
-        stepIndex++;
-      }, 750);
-    }
-
-    function openModal() {
-      modalBackdropEl.classList.remove("hidden");
-      modalEl.classList.remove("hidden");
-      startTimeline();
-    }
-
-    function closeModalNow() {
-      modalBackdropEl.classList.add("hidden");
-      modalEl.classList.add("hidden");
-      timelineEl.innerHTML = "";
-      clearInterval(interval);
-    }
-
-    if (openModalEl) openModalEl.onclick = openModal;
-    if (closeModalEl) closeModalEl.onclick = closeModalNow;
-    if (closeModalBottomEl) closeModalBottomEl.onclick = closeModalNow;
-    if (modalBackdropEl) modalBackdropEl.onclick = closeModalNow;
-
-    // BOARDING PASS ANIMATION (on scroll)
-    const boardingPass = document.getElementById("boarding-pass");
-    const planeIcon = document.getElementById("plane-icon");
-    const digitalInks = document.querySelectorAll(".digital-ink");
-
-    function playBoardingPassCinematic() {
-      if (!boardingPass) return;
-      boardingPass.classList.remove("translate-y-16", "opacity-0");
-      boardingPass.classList.add("translate-y-0", "opacity-100");
-
-      digitalInks.forEach((el, i) => {
-        setTimeout(() => el.classList.add("show"), 250 + i * 180);
-      });
-
-      if (planeIcon) {
-        planeIcon.style.left = "-5%";
-        setTimeout(() => {
-          planeIcon.style.left = "75%";
-        }, 100);
-      }
-    }
-
-    const bpObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
           playBoardingPassCinematic();
-          bpObserver.disconnect();
+          bpObs.disconnect();
         }
       });
     }, { threshold: 0.35 });
+    bpObs.observe(boardingPassEl);
+  }
+</script>
 
-    if (boardingPass) {
-      bpObserver.observe(boardingPass);
-    }
-  </script>
 </body>
 </html>
