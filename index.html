@@ -165,6 +165,23 @@
     .usecase-card:hover::before {
       opacity: 1;
     }
+
+    /* Boarding pass glow */
+#boarding-pass {
+  backdrop-filter: blur(12px);
+}
+#boarding-pass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: radial-gradient(circle at 50% 120%, rgba(56,189,248,.35), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+#boarding-pass:hover::after {
+  opacity: 1;
+}
     
   </style>
 </head>
@@ -300,6 +317,58 @@
 </section>
 
 
+<!-- =============================== -->
+<!--     DYNAMIC BOARDING PASS       -->
+<!-- =============================== -->
+<section id="boarding-pass-wrapper" class="overflow-hidden relative w-full flex justify-end my-20 px-6">
+
+  <div id="boarding-pass"
+       class="w-[320px] md:w-[380px] bg-[#0f172a] border border-sky-500/30 rounded-2xl shadow-2xl p-6 text-slate-200 transform translate-x-full opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(.22,.61,.36,1)] relative">
+
+    <div class="text-sm tracking-widest text-sky-300 mb-2">BOARDING PASS</div>
+
+    <div class="flex justify-between items-center mb-4">
+      <div>
+        <div class="text-3xl font-bold" id="bp-origin">BOM</div>
+        <div class="text-xs text-slate-400">Mumbai</div>
+      </div>
+      <div class="text-4xl font-light text-sky-400">→</div>
+      <div>
+        <div class="text-3xl font-bold" id="bp-destination">DEL</div>
+        <div class="text-xs text-slate-400">New Delhi</div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 my-4"></div>
+
+    <div class="grid grid-cols-2 gap-4 text-sm">
+      <div>
+        <div class="text-xs text-slate-400">Flight</div>
+        <div class="font-semibold text-sky-300" id="bp-flight">AI 431</div>
+      </div>
+      <div>
+        <div class="text-xs text-slate-400">Gate</div>
+        <div class="font-semibold" id="bp-gate">A7</div>
+      </div>
+      <div>
+        <div class="text-xs text-slate-400">Depart</div>
+        <div class="font-semibold" id="bp-time">19:45</div>
+      </div>
+      <div>
+        <div class="text-xs text-slate-400">Seat</div>
+        <div class="font-semibold" id="bp-seat">22A</div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 my-4"></div>
+
+    <div class="text-xs text-slate-400">
+      Auto-updates based on Synk’s real-time orchestration.
+    </div>
+
+  </div>
+</section>
+  
 
 
 <!-- ======================================= -->
@@ -902,6 +971,42 @@ function closeModalNow() {
 closeModalEl.onclick = closeModalNow;
 closeModalBottomEl.onclick = closeModalNow;
 modalBackdropEl.onclick = closeModalNow;
+
+  // ===============================
+//   BOARDING PASS ANIMATION
+// ===============================
+function showBoardingPass() {
+  const pass = document.getElementById("boarding-pass");
+
+  // Slide in animation
+  setTimeout(() => {
+    pass.classList.remove("translate-x-full", "opacity-0");
+    pass.classList.add("translate-x-0", "opacity-100");
+  }, 150);
+
+  // Random dynamic values
+  const flights = ["AI 431", "UK 811", "6E 502", "SG 902", "G8 311"];
+  const gates   = ["A7", "B4", "C12", "D3", "A2"];
+  const times   = ["19:45", "20:10", "18:30", "22:15", "21:05"];
+  const seats   = ["22A", "14C", "9F", "18B", "7A"];
+
+  document.getElementById("bp-flight").textContent = flights[Math.floor(Math.random()*flights.length)];
+  document.getElementById("bp-gate").textContent = gates[Math.floor(Math.random()*gates.length)];
+  document.getElementById("bp-time").textContent = times[Math.floor(Math.random()*times.length)];
+  document.getElementById("bp-seat").textContent = seats[Math.floor(Math.random()*seats.length)];
+}
+
+// Trigger when section scrolls into view
+const bpObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      showBoardingPass();
+      bpObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+
+bpObserver.observe(document.getElementById("boarding-pass-wrapper"));
 </script>
 
 </body>
