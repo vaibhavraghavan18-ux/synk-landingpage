@@ -1,286 +1,634 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Synk.ai — Travel, finally in sync.</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synk.ai — Your Journeys Finally in Sync</title>
 
-  <!-- TAILWIND -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
+    :root {
+      --bg-dark: #05070d;
+      --bg-deep: #0a0f1a;
+      --accent1: #3b82f6;
+      --accent2: #60a5fa;
+      --glass: rgba(255, 255, 255, 0.08);
+      --line: rgba(255, 255, 255, 0.12);
+    }
+
     body {
-      font-family: Inter, system-ui, sans-serif;
-      background: radial-gradient(circle at 30% 10%, #0f172a, #020617 70%);
-      color: #e2e8f0;
+      font-family: Inter, system-ui;
+      background: var(--bg-dark);
+      color: white;
       overflow-x: hidden;
     }
 
-    /* GLOBAL REVEAL ANIMATIONS */
+    /* Glassmorphism card */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    /* Particles */
+    #particles {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Parallax container */
+    .parallax {
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    /* Reveal animation */
     .reveal {
       opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s cubic-bezier(.2,.7,.3,1);
+      transform: translateY(20px);
+      transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .reveal.on {
+    .reveal.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    /* SOFT PARALLAX LIGHTS */
-    .light-blob {
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.28;
-      pointer-events: none;
-      animation: float 14s ease-in-out infinite alternate;
-    }
-    @keyframes float {
-      from { transform: translateY(0px); }
-      to   { transform: translateY(40px); }
+    /* Floating glow */
+    .glow-pulse {
+      animation: glow 4s ease-in-out infinite alternate;
     }
 
-    /* Animated glowing card borders */
-    .glow-card {
-      position: relative;
-      background: rgba(255,255,255,0.02);
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(14px);
-      transition: border 0.4s ease, box-shadow 0.4s ease;
-    }
-    .glow-card:hover {
-      border-color: rgba(255,255,255,0.18);
-      box-shadow: 0 0 20px rgba(56,189,248,0.20);
+    @keyframes glow {
+      0% { opacity: .4; transform: scale(1); }
+      100% { opacity: .9; transform: scale(1.15); }
     }
 
-    .hero-glow {
-      animation: pulseGlow 6s infinite alternate;
-      filter: blur(150px);
+    /* Button hover */
+    .btn {
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      border-radius: 14px;
+      padding: 14px 26px;
+      transition: 0.3s ease;
     }
-    @keyframes pulseGlow {
-      from { opacity: 0.3; }
-      to { opacity: 0.55; }
-    }
-
-    .fade-up {
-      opacity: 0;
-      transform: translateY(15px);
-      transition: all 0.6s ease-out;
-    }
-    .fade-up.on {
-      opacity: 1;
-      transform: translateY(0);
+    .btn:hover {
+      filter: brightness(1.15);
+      transform: translateY(-3px);
     }
 
-    .hover-scale {
-      transition: transform .25s ease;
-    }
-    .hover-scale:hover {
-      transform: scale(1.03);
+    /* Modal backdrop */
+    #modal-backdrop {
+      backdrop-filter: blur(20px);
+      background: rgba(0,0,0,0.6);
     }
   </style>
 </head>
 
-<body class="relative">
+<body>
 
-<!-- BACKGROUND FLOATING LIGHT BLOBS -->
-<div class="light-blob" style="top:-200px;left:-150px;background:#38bdf8;"></div>
-<div class="light-blob" style="bottom:-200px;right:-150px;background:#6366f1;"></div>
+<!-- =============================== -->
+<!--           HERO SECTION          -->
+<!-- =============================== -->
 
-
-<!-- NAVBAR -->
-<header class="sticky top-0 z-50 backdrop-blur-xl bg-black/20 border-b border-white/10">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+<header class="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-xl border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
     <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-400 to-blue-600"></div>
-      <span class="font-semibold text-white text-lg tracking-tight">Synk<span class="text-sky-400">.ai</span></span>
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-sky-400"></div>
+      <span class="font-semibold tracking-tight text-lg">Synk<span class="text-sky-400">.ai</span></span>
     </div>
+
     <nav class="hidden md:flex gap-8 text-sm text-gray-300">
-      <a href="#how" class="hover:text-white transition">How it works</a>
-      <a href="#beforeafter" class="hover:text-white transition">Before/After</a>
-      <a href="#vision" class="hover:text-white transition">Vision</a>
+      <a href="#how" class="hover:text-white">How it works</a>
+      <a href="#usecases" class="hover:text-white">Use Cases</a>
+      <a href="#before" class="hover:text-white">Before/After</a>
+      <a href="#vision" class="hover:text-white">Vision</a>
     </nav>
   </div>
 </header>
 
+<section class="relative h-[100vh] flex items-center justify-center parallax overflow-hidden">
 
-<!-- HERO SECTION -->
-<section class="relative py-32">
-  <div class="absolute inset-0 flex justify-center">
-    <div class="hero-glow w-[50vw] h-[50vw] bg-sky-500 opacity-40 rounded-full"></div>
+  <!-- Particle Canvas -->
+  <canvas id="particles"></canvas>
+
+  <!-- Hero Background (YOUR image — replace file only, not code) -->
+  <div class="absolute inset-0">
+    <img src="./assets/hero.png" class="w-full h-full object-cover opacity-50">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/90"></div>
   </div>
 
-  <div class="max-w-5xl mx-auto text-center relative z-10">
-    <h1 class="text-5xl md:text-7xl font-black tracking-tight text-white reveal">
-      Your journeys, finally in sync.
+  <!-- Floating Glows -->
+  <div class="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full bg-blue-500/20 blur-[140px] glow-pulse"></div>
+  <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-sky-400/20 blur-[130px] glow-pulse"></div>
+
+  <!-- Hero Content -->
+  <div class="relative z-20 max-w-3xl text-center px-6">
+    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6 reveal">
+      Your journeys, finally in sync with
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300">
+        Synk.ai
+      </span>
     </h1>
 
-    <p class="mt-6 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto reveal">
-      Synk.ai turns the chaos of cabs, flights, hotels, and payments into one self-managing flow.
+    <p class="text-gray-300 text-lg md:text-xl reveal">
+      The AI layer that orchestrates your entire travel experience —
+      from cabs to flights to stays — automatically, across every app.
     </p>
 
-    <button class="mt-10 px-8 py-4 bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl text-white font-semibold hover-scale reveal">
-      Experience Synk →
-    </button>
+    <div class="mt-10 flex justify-center reveal">
+      <button id="open-modal" class="btn text-black font-semibold text-lg shadow-lg">
+        Experience Synk
+      </button>
+    </div>
+  </div>
+
+</section>
+
+<!-- Hero Section END -->
+<!-- PART 1 END -- DO NOT ADD ANYTHING BELOW -->
+
+  <!-- ======================================= -->
+<!--          HOW SYNK WORKS SECTION         -->
+<!-- ======================================= -->
+
+<section id="how" class="relative py-24 bg-gradient-to-b from-black/80 to-black/95 overflow-hidden">
+
+  <!-- Background holo grid -->
+  <div class="absolute inset-0 opacity-20">
+    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.4"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid)" />
+    </svg>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6">
+
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-4xl md:text-5xl font-extrabold mb-4 reveal">
+        How Synk Works
+      </h2>
+      <p class="text-gray-300 text-lg reveal">
+        Say the plan. Synk understands intent, synchronizes all apps, and manages the journey end-to-end.
+      </p>
+    </div>
+
+    <!-- Steps -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+      <div class="glass p-6 reveal hover:scale-[1.02] transition-all cursor-default">
+        <div class="text-2xl font-bold text-blue-400 mb-2">1. Understand</div>
+        <p class="text-gray-300 text-sm">
+          You speak naturally. Synk processes intent, locations, times, preferences, and calendar context.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:scale-[1.02] transition-all cursor-default">
+        <div class="text-2xl font-bold text-blue-400 mb-2">2. Plan</div>
+        <p class="text-gray-300 text-sm">
+          Synk finds the best options across flights, cabs, hotels & stays — then builds one synchronized itinerary.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:scale-[1.02] transition-all cursor-default">
+        <div class="text-2xl font-bold text-blue-400 mb-2">3. Execute</div>
+        <p class="text-gray-300 text-sm">
+          Bookings, reschedules, re-timing for delays, and all transports are handled automatically.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:scale-[1.02] transition-all cursor-default">
+        <div class="text-2xl font-bold text-blue-400 mb-2">4. Pay</div>
+        <p class="text-gray-300 text-sm">
+          Synk’s smart wallet picks the right card, applies offers, and stores receipts without you doing anything.
+        </p>
+      </div>
+
+    </div>
   </div>
 </section>
 
 
 
-<!-- BEFORE SYNC -->
-<section id="oldworld" class="py-24">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="reveal text-center mb-14">
-      <h2 class="text-4xl font-bold text-white">Before Synk: chaos everywhere.</h2>
-      <p class="text-gray-400 mt-3">Five disconnected apps. Zero harmony.</p>
+
+<!-- ======================================= -->
+<!--       UNDER THE HOOD (ORCHESTRATION)    -->
+<!-- ======================================= -->
+
+<section class="relative py-28 bg-gradient-to-b from-black/95 to-[#05070d] overflow-hidden">
+
+  <!-- floating glowing rings -->
+  <div class="absolute -top-24 left-1/3 w-[600px] h-[600px] rounded-full bg-blue-500/10 blur-[160px] glow-pulse"></div>
+  <div class="absolute -bottom-24 right-1/3 w-[500px] h-[500px] rounded-full bg-sky-400/10 blur-[150px] glow-pulse"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6">
+
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-4xl md:text-5xl font-extrabold reveal">The AI Orchestration Layer</h2>
+      <p class="text-gray-300 text-lg reveal">
+        Synk connects with travel, mobility and payments APIs — synchronizing your world without manual input.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+      <div class="glass p-6 reveal hover:-translate-y-1 transition-all">
+        <div class="text-xl font-bold text-sky-400 mb-1">Cab</div>
+        <p class="text-gray-300 text-sm">
+          ETAs, surge awareness, dynamic scheduling, re-timing based on traffic.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:-translate-y-1 transition-all">
+        <div class="text-xl font-bold text-sky-400 mb-1">Flights</div>
+        <p class="text-gray-300 text-sm">
+          Live status feeds trigger auto-reschedules and rearranged ground transport.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:-translate-y-1 transition-all">
+        <div class="text-xl font-bold text-sky-400 mb-1">Hotels</div>
+        <p class="text-gray-300 text-sm">
+          Late arrival handling, auto check-in windows, synced with your itinerary.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:-translate-y-1 transition-all">
+        <div class="text-xl font-bold text-sky-400 mb-1">Wallet</div>
+        <p class="text-gray-300 text-sm">
+          Best-offer card selection, auto-pay, consolidated receipts.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ======================================= -->
+<!--               USE CASES                 -->
+<!-- ======================================= -->
+
+<section id="usecases" class="relative py-28 overflow-hidden bg-black">
+
+  <!-- hologram lines behind -->
+  <div class="absolute inset-0 opacity-[0.07]">
+    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="diag" patternUnits="userSpaceOnUse" width="200" height="200">
+          <path d="M-50 100 L100 -50 L250 100" stroke="white" stroke-width="0.5" fill="none" />
+          <path d="M-50 150 L150 -50 L350 150" stroke="white" stroke-width="0.5" fill="none" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#diag)" />
+    </svg>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6">
+
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-4xl md:text-5xl font-extrabold reveal">What Synk Can Do</h2>
+      <p class="text-gray-300 text-lg reveal">One intent. One assistant. One synchronized experience.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <div class="glass p-6 reveal hover:scale-[1.03] transition-all">
+        <div class="font-bold text-blue-400 text-lg mb-2">7 PM movie show</div>
+        <p class="text-gray-300 text-sm">
+          Book tickets, schedule cab timings, anticipate traffic, store entry codes — fully automated.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:scale-[1.03] transition-all">
+        <div class="font-bold text-blue-400 text-lg mb-2">Dinner plan</div>
+        <p class="text-gray-300 text-sm">
+          Reserve table, allocate transport, time arrival perfectly, apply the best payment offer.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:scale-[1.03] transition-all">
+        <div class="font-bold text-blue-400 text-lg mb-2">Multiple errands</div>
+        <p class="text-gray-300 text-sm">
+          Synk reorders your route dynamically based on traffic, delays, and store timings.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:scale-[1.03] transition-all">
+        <div class="font-bold text-blue-400 text-lg mb-2">Weekend getaway</div>
+        <p class="text-gray-300 text-sm">
+          Synk checks calendar, finds best dates, books stays + transport, and syncs everything.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:scale-[1.03] transition-all">
+        <div class="font-bold text-blue-400 text-lg mb-2">Full vacation</div>
+        <p class="text-gray-300 text-sm">
+          Flights, hotels, cabs, attractions, reservations — one AI-built itinerary.
+        </p>
+      </div>
+
+      <div class="glass p-6 reveal hover:scale-[1.03] transition-all">
+        <div class="font-bold text-blue-400 text-lg mb-2">Meetings across city</div>
+        <p class="text-gray-300 text-sm">
+          Predict commute times, auto-book transport, block calendar, adjust for overruns.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+
+
+<!-- ======================================= -->
+<!--             BEFORE / AFTER              -->
+<!-- ======================================= -->
+
+<section id="before" class="relative py-28 bg-gradient-to-b from-[#05070d] to-black overflow-hidden">
+
+  <div class="relative max-w-7xl mx-auto px-6">
+
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-4xl md:text-5xl font-extrabold reveal">Before & After Synk</h2>
+      <p class="text-gray-300 text-lg reveal">What changes when the world runs around your intent?</p>
     </div>
 
     <div class="grid md:grid-cols-2 gap-10">
 
-      <!-- FRAGMENTED -->
-      <div class="glow-card p-6 fade-up">
-        <div class="text-lg font-semibold text-white mb-3">Fragmented travel</div>
-        <img src="./assets/chaos.png"
-             class="rounded-xl w-full h-auto object-cover opacity-90 hover-scale">
-        <ul class="mt-6 text-gray-400 space-y-2 text-sm">
-          <li>• Switching 3–5 apps per trip</li>
-          <li>• Manual rebooking after delays</li>
-          <li>• Calendar conflicts + bad timing</li>
-          <li>• Lost offers + scattered loyalty</li>
+      <div class="glass p-6 reveal">
+        <h3 class="text-xl font-semibold text-red-400 mb-4">Before Synk</h3>
+        <ul class="text-gray-300 space-y-3 text-sm">
+          <li>• 5 apps for a single trip</li>
+          <li>• Manually adjusting cab, flight, hotel</li>
+          <li>• Missing offers and loyalty benefits</li>
+          <li>• Re-entering the same info many times</li>
+          <li>• No single source of truth</li>
         </ul>
       </div>
 
-      <!-- WHAT PEOPLE WANT -->
-      <div class="glow-card p-6 fade-up">
-        <div class="text-lg font-semibold text-white mb-3">What people really want</div>
-
-        <div class="space-y-5">
-          <div class="reveal">
-            <span class="font-semibold text-white">“Pune on Friday.”</span>
-            <p class="text-gray-400">One assistant plans end-to-end.</p>
-          </div>
-
-          <div class="reveal">
-            <span class="font-semibold text-white">When things change,</span>
-            <p class="text-gray-400">everything auto-updates.</p>
-          </div>
-
-          <div class="reveal">
-            <span class="font-semibold text-white">Payments handled,</span>
-            <p class="text-gray-400">with the best card + smartest offer applied.</p>
-          </div>
-        </div>
-
+      <div class="glass p-6 reveal">
+        <h3 class="text-xl font-semibold text-green-400 mb-4">After Synk</h3>
+        <ul class="text-gray-300 space-y-3 text-sm">
+          <li>• One assistant manages everything</li>
+          <li>• Auto-reschedules and dynamic timing</li>
+          <li>• One synchronized itinerary</li>
+          <li>• Best payment option applied automatically</li>
+          <li>• Stress-free, intent-driven movement</li>
+        </ul>
       </div>
 
     </div>
+
   </div>
 </section>
 
 
 
-<!-- HOW SYNK WORKS -->
-<section id="how" class="py-28">
-  <div class="max-w-6xl mx-auto px-6 text-center reveal">
-    <h2 class="text-4xl font-bold text-white">Synk in action</h2>
-    <p class="text-gray-400 mt-3">AI listens, plans, books, reschedules, and pays — automatically.</p>
-  </div>
 
-  <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 mt-12">
+<!-- ======================================= -->
+<!--                 VISION                  -->
+<!-- ======================================= -->
 
-    <!-- IMAGE -->
-    <div class="glow-card overflow-hidden fade-up">
-      <img src="./assets/synk-action.png"
-           class="rounded-2xl w-full h-auto object-cover opacity-90 hover-scale">
-    </div>
+<section id="vision" class="relative py-32 bg-black text-center overflow-hidden">
 
-    <!-- STEPS -->
-    <div class="space-y-6">
-      <div class="glow-card p-6 fade-up">
-        <div class="text-white font-semibold text-lg">Understand</div>
-        <p class="text-gray-400 mt-1 text-sm">Plain-English intent + your calendar = perfect context.</p>
-      </div>
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-600/20 blur-[180px] glow-pulse"></div>
 
-      <div class="glow-card p-6 fade-up">
-        <div class="text-white font-semibold text-lg">Plan</div>
-        <p class="text-gray-400 mt-1 text-sm">Best options across flights, cabs, stays — synced.</p>
-      </div>
-
-      <div class="glow-card p-6 fade-up">
-        <div class="text-white font-semibold text-lg">Execute</div>
-        <p class="text-gray-400 mt-1 text-sm">Auto-booking, re-booking, and time alignment.</p>
-      </div>
-
-      <div class="glow-card p-6 fade-up">
-        <div class="text-white font-semibold text-lg">Pay</div>
-        <p class="text-gray-400 mt-1 text-sm">Smart wallet automatically applies the best offer.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-<!-- BEFORE / AFTER -->
-<section id="beforeafter" class="py-28">
-  <div class="max-w-6xl mx-auto px-6 text-center reveal">
-    <h2 class="text-4xl font-bold text-white">From 5 apps to 1 unified flow.</h2>
-    <p class="text-gray-400 mt-3">Synk replaces the entire travel workflow.</p>
-  </div>
-
-  <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto px-6 mt-16">
-
-    <div class="glow-card p-6 fade-up">
-      <div class="text-white font-semibold mb-3">Before</div>
-      <img src="./assets/before.png" class="rounded-xl w-full h-auto hover-scale">
-    </div>
-
-    <div class="glow-card p-6 fade-up">
-      <div class="text-white font-semibold mb-3">After</div>
-      <img src="./assets/after.png" class="rounded-xl w-full h-auto hover-scale">
-    </div>
-  </div>
-</section>
-
-
-<!-- VISION -->
-<section id="vision" class="py-32 text-center">
-  <div class="max-w-3xl mx-auto reveal">
-    <h2 class="text-4xl font-bold text-white">“The future of travel is self-managing.”</h2>
-    <p class="text-gray-400 mt-4">
-      Synk.ai coordinates every step — so you can simply move.
+  <div class="relative z-10 max-w-4xl mx-auto px-6">
+    <h2 class="text-4xl md:text-5xl font-extrabold reveal">
+      “The future of travel is self-managing.”
+    </h2>
+    <p class="text-gray-300 text-lg mt-6 reveal">
+      Synk.ai orchestrates every step so people can simply move.
     </p>
   </div>
+
 </section>
 
+<!-- PART 2 END -- PART 3 WILL CONTINUE IMMEDIATELY BELOW -->
 
-<!-- FOOTER -->
-<footer class="py-8 border-t border-white/10 text-center text-gray-500 text-sm">
-  © <span id="year"></span> Synk.ai — Designed for world-class AI experiences.
+  <!-- ======================================= -->
+<!--                 FOOTER                  -->
+<!-- ======================================= -->
+
+<footer class="py-12 bg-black border-t border-white/10 text-center">
+  <p class="text-gray-400 text-sm">
+    © <span id="year"></span> Synk.ai — Built for Ken Disrupt 2025
+  </p>
 </footer>
 
 
 
+<!-- ======================================= -->
+<!--            CINEMATIC AI MODAL           -->
+<!-- ======================================= -->
 
-<!-- JAVASCRIPT -->
+<!-- Backdrop -->
+<div id="modal-backdrop" class="fixed inset-0 hidden items-center justify-center z-[999]">
+</div>
+
+<!-- Modal -->
+<div id="modal"
+     class="fixed inset-0 hidden items-center justify-center z-[1000] px-6">
+  <div class="glass w-full max-w-2xl p-8 border border-white/20
+              rounded-2xl shadow-2xl bg-black/60 backdrop-blur-2xl">
+
+    <div class="text-center mb-6">
+      <h3 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
+        Synk AI Console
+      </h3>
+      <p class="text-gray-400 text-sm mt-2">Cinematic preview</p>
+    </div>
+
+    <!-- Booting lines -->
+    <div class="font-mono text-sm text-blue-200 space-y-1" id="terminal">
+      <!-- Filled dynamically -->
+    </div>
+
+    <div class="text-center mt-8">
+      <button id="close-modal"
+              class="mt-4 btn text-black font-semibold shadow-xl">
+        Close
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- ======================================= -->
+<!--                SCRIPTS                  -->
+<!-- ======================================= -->
+
 <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+// CURRENT YEAR
+document.getElementById("year").textContent = new Date().getFullYear();
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("on");
-      }
+
+// ===========================
+// REVEAL ON SCROLL
+// ===========================
+const revealEls = document.querySelectorAll(".reveal");
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+revealEls.forEach((el) => io.observe(el));
+
+
+
+// ===========================
+// SMOOTH SCROLL FOR NAV
+// ===========================
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute("href"));
+    if (!target) return;
+    window.scrollTo({
+      top: target.offsetTop - 70,
+      behavior: "smooth"
     });
-  }, { threshold: 0.15 });
+  });
+});
 
-  document.querySelectorAll(".reveal, .fade-up").forEach(el => io.observe(el));
+
+
+// ===========================
+// MOUSE PARALLAX (hero)
+// ===========================
+document.addEventListener("mousemove", (e) => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 30;
+  const y = (e.clientY / window.innerHeight - 0.5) * 30;
+  document.querySelector("section.parallax").style.transform =
+    `translate3d(${x}px, ${y}px, 0)`;
+});
+
+
+
+// ===========================
+// PARTICLE ENGINE
+// ===========================
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+let w, h, particles;
+
+function initParticles() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+
+  particles = Array.from({ length: 90 }, () => ({
+    x: Math.random() * w,
+    y: Math.random() * h,
+    r: Math.random() * 2 + 0.5,
+    dx: (Math.random() - 0.5) * 0.3,
+    dy: (Math.random() - 0.5) * 0.3,
+  }));
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, w, h);
+  particles.forEach((p) => {
+    p.x += p.dx;
+    p.y += p.dy;
+
+    // wrap edges
+    if (p.x < 0) p.x = w;
+    if (p.x > w) p.x = 0;
+    if (p.y < 0) p.y = h;
+    if (p.y > h) p.y = 0;
+
+    ctx.beginPath();
+    ctx.fillStyle = "#60a5fa";
+    ctx.globalAlpha = 0.5;
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+
+window.addEventListener("resize", initParticles);
+initParticles();
+animateParticles();
+
+
+
+// ===========================
+// CINEMATIC MODAL
+// ===========================
+
+const modalBackdrop = document.getElementById("modal-backdrop");
+const modal = document.getElementById("modal");
+const openModal = document.getElementById("open-modal");
+const closeModal = document.getElementById("close-modal");
+
+openModal.onclick = () => {
+  modalBackdrop.classList.remove("hidden");
+  modal.classList.remove("hidden");
+  launchBootAnimation();
+};
+
+closeModal.onclick = closeModalNow;
+modalBackdrop.onclick = closeModalNow;
+
+function closeModalNow() {
+  modalBackdrop.classList.add("hidden");
+  modal.classList.add("hidden");
+  document.getElementById("terminal").innerHTML = "";
+}
+
+
+// ===========================
+// AI BOOT SEQUENCE
+// ===========================
+const terminalLines = [
+  "Initializing Synk AI subsystem...",
+  "Loading travel-index vectors...",
+  "Fetching calendar context...",
+  "Syncing cab, flight & hotel APIs...",
+  "Predicting delays & contingencies...",
+  "Activating smart wallet engine...",
+  "Building synchronized itinerary...",
+  "Travel system ready."
+];
+
+function launchBootAnimation() {
+  const term = document.getElementById("terminal");
+  term.innerHTML = "";
+
+  let index = 0;
+  function showNext() {
+    if (index >= terminalLines.length) return;
+    const line = document.createElement("div");
+    line.textContent = terminalLines[index];
+    term.appendChild(line);
+    index++;
+    setTimeout(showNext, 300);
+  }
+  showNext();
+}
+
 </script>
 
 </body>
