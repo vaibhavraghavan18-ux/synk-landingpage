@@ -438,22 +438,40 @@
 <!--            CINEMATIC AI MODAL           -->
 <!-- ======================================= -->
 
-<!-- Backdrop -->
-<div id="modal-backdrop" class="fixed inset-0 hidden items-center justify-center z-[999]">
-</div>
+<!-- =============================== -->
+<!--      CINEMATIC SYNK MODAL      -->
+<!-- =============================== -->
 
-<!-- Modal -->
+<div id="modal-backdrop"
+     class="fixed inset-0 hidden justify-center items-center bg-black/60 backdrop-blur-xl z-[900]"></div>
+
 <div id="modal"
-     class="fixed inset-0 hidden items-center justify-center z-[1000] px-6">
-  <div class="glass w-full max-w-2xl p-8 border border-white/20
-              rounded-2xl shadow-2xl bg-black/60 backdrop-blur-2xl">
+     class="fixed inset-0 hidden justify-center items-center z-[1000] px-6">
 
-    <div class="text-center mb-6">
-      <h3 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
-        Synk AI Console
-      </h3>
-      <p class="text-gray-400 text-sm mt-2">Cinematic preview</p>
+  <div class="glass relative w-full max-w-3xl rounded-2xl border border-white/20 bg-black/50 backdrop-blur-2xl p-10 shadow-2xl overflow-hidden">
+
+    <!-- Animated hologram glow -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute w-[500px] h-[500px] bg-blue-500/20 blur-[180px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
     </div>
+
+    <h3 class="text-3xl font-extrabold text-center mb-10 bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
+      Synk Orchestration Demo
+    </h3>
+
+    <!-- TIMELINE -->
+    <div id="timeline" class="space-y-6 text-gray-200 text-lg font-medium"></div>
+
+    <div class="text-center mt-10">
+      <button id="close-modal"
+              class="btn text-black font-semibold shadow-xl px-6 py-3">
+        Close
+      </button>
+    </div>
+
+  </div>
+
+</div>
 
     <!-- Booting lines -->
     <div class="font-mono text-sm text-blue-200 space-y-1" id="terminal">
@@ -578,15 +596,64 @@ animateParticles();
 // CINEMATIC MODAL
 // ===========================
 
+<script>
+// === NEW CINEMATIC MODAL LOGIC ===
+
 const modalBackdrop = document.getElementById("modal-backdrop");
 const modal = document.getElementById("modal");
 const openModal = document.getElementById("open-modal");
 const closeModal = document.getElementById("close-modal");
+const timeline = document.getElementById("timeline");
+
+// Steps in cinematic timeline
+const steps = [
+  "Understanding your intent…",
+  "Parsing location, date, time & context…",
+  "Checking your calendar for conflicts…",
+  "Finding the best transport options…",
+  "Building synchronized cab ⇄ flight ⇄ hotel timing…",
+  "Predicting delays & alternate routes…",
+  "Applying best payment option…",
+  "Your journey is fully synchronized."
+];
+
+let stepIndex = 0;
+let interval = null;
+
+function playTimeline() {
+  timeline.innerHTML = "";
+  stepIndex = 0;
+
+  interval = setInterval(() => {
+    if (stepIndex >= steps.length) {
+      clearInterval(interval);
+      return;
+    }
+
+    // Create line
+    const line = document.createElement("div");
+    line.className =
+      "opacity-0 translate-y-2 transition-all duration-700 bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-lg shadow-lg";
+    line.innerHTML = `
+      <div class="text-blue-300 font-semibold mb-1">Step ${stepIndex + 1}</div>
+      <div>${steps[stepIndex]}</div>
+    `;
+
+    timeline.appendChild(line);
+
+    // Animate reveal
+    setTimeout(() => {
+      line.classList.remove("opacity-0", "translate-y-2");
+    }, 50);
+
+    stepIndex++;
+  }, 700);
+}
 
 openModal.onclick = () => {
   modalBackdrop.classList.remove("hidden");
   modal.classList.remove("hidden");
-  launchBootAnimation();
+  playTimeline();
 };
 
 closeModal.onclick = closeModalNow;
@@ -595,9 +662,10 @@ modalBackdrop.onclick = closeModalNow;
 function closeModalNow() {
   modalBackdrop.classList.add("hidden");
   modal.classList.add("hidden");
-  document.getElementById("terminal").innerHTML = "";
+  timeline.innerHTML = "";
+  clearInterval(interval);
 }
-
+</script>
 
 // ===========================
 // AI BOOT SEQUENCE
