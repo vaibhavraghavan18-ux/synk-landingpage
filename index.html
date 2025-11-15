@@ -433,11 +433,6 @@
 </footer>
 
 
-
-<!-- ======================================= -->
-<!--            CINEMATIC AI MODAL           -->
-<!-- ======================================= -->
-
 <!-- =============================== -->
 <!--      CINEMATIC SYNK MODAL      -->
 <!-- =============================== -->
@@ -470,38 +465,19 @@
     </div>
 
   </div>
-
-</div>
-
-    <!-- Booting lines -->
-    <div class="font-mono text-sm text-blue-200 space-y-1" id="terminal">
-      <!-- Filled dynamically -->
-    </div>
-
-    <div class="text-center mt-8">
-      <button id="close-modal"
-              class="mt-4 btn text-black font-semibold shadow-xl">
-        Close
-      </button>
-    </div>
-
-  </div>
 </div>
 
 
-
-<!-- ======================================= -->
-<!--                SCRIPTS                  -->
-<!-- ======================================= -->
+<!-- =============================== -->
+<!--             SCRIPTS             -->
+<!-- =============================== -->
 
 <script>
 // CURRENT YEAR
 document.getElementById("year").textContent = new Date().getFullYear();
 
 
-// ===========================
-// REVEAL ON SCROLL
-// ===========================
+// REVEAL ANIMATIONS
 const revealEls = document.querySelectorAll(".reveal");
 const io = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
@@ -511,14 +487,10 @@ const io = new IntersectionObserver((entries) => {
     }
   });
 }, { threshold: 0.2 });
-
 revealEls.forEach((el) => io.observe(el));
 
 
-
-// ===========================
-// SMOOTH SCROLL FOR NAV
-// ===========================
+// SMOOTH SCROLL
 document.querySelectorAll('a[href^="#"]').forEach(link => {
   link.addEventListener("click", (e) => {
     e.preventDefault();
@@ -532,80 +504,69 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 });
 
 
-
-// ===========================
-// MOUSE PARALLAX (hero)
-// ===========================
+// PARALLAX (HERO)
 document.addEventListener("mousemove", (e) => {
   const x = (e.clientX / window.innerWidth - 0.5) * 30;
   const y = (e.clientY / window.innerHeight - 0.5) * 30;
-  document.querySelector("section.parallax").style.transform =
-    `translate3d(${x}px, ${y}px, 0)`;
+  const section = document.querySelector("section.parallax");
+  if (section) {
+    section.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  }
 });
 
 
-
-// ===========================
 // PARTICLE ENGINE
-// ===========================
 const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-let w, h, particles;
+if (canvas) {
+  const ctx = canvas.getContext("2d");
+  let w, h, particles;
 
-function initParticles() {
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
+  function initParticles() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    particles = Array.from({ length: 90 }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 2 + 0.5,
+      dx: (Math.random() - 0.5) * 0.3,
+      dy: (Math.random() - 0.5) * 0.3,
+    }));
+  }
 
-  particles = Array.from({ length: 90 }, () => ({
-    x: Math.random() * w,
-    y: Math.random() * h,
-    r: Math.random() * 2 + 0.5,
-    dx: (Math.random() - 0.5) * 0.3,
-    dy: (Math.random() - 0.5) * 0.3,
-  }));
+  function animateParticles() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach((p) => {
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.x < 0) p.x = w;
+      if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      if (p.y > h) p.y = 0;
+
+      ctx.beginPath();
+      ctx.fillStyle = "#60a5fa";
+      ctx.globalAlpha = 0.5;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(animateParticles);
+  }
+
+  window.addEventListener("resize", initParticles);
+  initParticles();
+  animateParticles();
 }
 
-function animateParticles() {
-  ctx.clearRect(0, 0, w, h);
-  particles.forEach((p) => {
-    p.x += p.dx;
-    p.y += p.dy;
 
-    // wrap edges
-    if (p.x < 0) p.x = w;
-    if (p.x > w) p.x = 0;
-    if (p.y < 0) p.y = h;
-    if (p.y > h) p.y = 0;
+// ===============================
+// NEW MODAL (TIMELINE DEMO)
+// ===============================
+const modalBackdropEl = document.getElementById("modal-backdrop");
+const modalEl = document.getElementById("modal");
+const openModalEl = document.getElementById("open-modal");
+const closeModalEl = document.getElementById("close-modal");
+const timelineEl = document.getElementById("timeline");
 
-    ctx.beginPath();
-    ctx.fillStyle = "#60a5fa";
-    ctx.globalAlpha = 0.5;
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  requestAnimationFrame(animateParticles);
-}
-
-window.addEventListener("resize", initParticles);
-initParticles();
-animateParticles();
-
-
-
-// ===========================
-// CINEMATIC MODAL
-// ===========================
-
-<script>
-// === NEW CINEMATIC MODAL LOGIC ===
-
-const modalBackdrop = document.getElementById("modal-backdrop");
-const modal = document.getElementById("modal");
-const openModal = document.getElementById("open-modal");
-const closeModal = document.getElementById("close-modal");
-const timeline = document.getElementById("timeline");
-
-// Steps in cinematic timeline
 const steps = [
   "Understanding your intent…",
   "Parsing location, date, time & context…",
@@ -621,16 +582,13 @@ let stepIndex = 0;
 let interval = null;
 
 function playTimeline() {
-  timeline.innerHTML = "";
+  timelineEl.innerHTML = "";
   stepIndex = 0;
-
   interval = setInterval(() => {
     if (stepIndex >= steps.length) {
       clearInterval(interval);
       return;
     }
-
-    // Create line
     const line = document.createElement("div");
     line.className =
       "opacity-0 translate-y-2 transition-all duration-700 bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-lg shadow-lg";
@@ -638,65 +596,29 @@ function playTimeline() {
       <div class="text-blue-300 font-semibold mb-1">Step ${stepIndex + 1}</div>
       <div>${steps[stepIndex]}</div>
     `;
-
-    timeline.appendChild(line);
-
-    // Animate reveal
+    timelineEl.appendChild(line);
     setTimeout(() => {
       line.classList.remove("opacity-0", "translate-y-2");
     }, 50);
-
     stepIndex++;
   }, 700);
 }
 
-openModal.onclick = () => {
-  modalBackdrop.classList.remove("hidden");
-  modal.classList.remove("hidden");
+openModalEl.onclick = () => {
+  modalBackdropEl.classList.remove("hidden");
+  modalEl.classList.remove("hidden");
   playTimeline();
 };
 
-closeModal.onclick = closeModalNow;
-modalBackdrop.onclick = closeModalNow;
+closeModalEl.onclick = closeModalNow;
+modalBackdropEl.onclick = closeModalNow;
 
 function closeModalNow() {
-  modalBackdrop.classList.add("hidden");
-  modal.classList.add("hidden");
-  timeline.innerHTML = "";
+  modalBackdropEl.classList.add("hidden");
+  modalEl.classList.add("hidden");
+  timelineEl.innerHTML = "";
   clearInterval(interval);
 }
-</script>
-
-// ===========================
-// AI BOOT SEQUENCE
-// ===========================
-const terminalLines = [
-  "Initializing Synk AI subsystem...",
-  "Loading travel-index vectors...",
-  "Fetching calendar context...",
-  "Syncing cab, flight & hotel APIs...",
-  "Predicting delays & contingencies...",
-  "Activating smart wallet engine...",
-  "Building synchronized itinerary...",
-  "Travel system ready."
-];
-
-function launchBootAnimation() {
-  const term = document.getElementById("terminal");
-  term.innerHTML = "";
-
-  let index = 0;
-  function showNext() {
-    if (index >= terminalLines.length) return;
-    const line = document.createElement("div");
-    line.textContent = terminalLines[index];
-    term.appendChild(line);
-    index++;
-    setTimeout(showNext, 300);
-  }
-  showNext();
-}
-
 </script>
 
 </body>
